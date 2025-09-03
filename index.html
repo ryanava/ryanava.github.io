@@ -42,21 +42,24 @@
             margin-top: 20px;
         }
 
+
         .projects ul {
+            display: grid;
+            grid-template-columns: repeat(5, auto); /* 5 per row */
+            gap: 15px 30px; /* row gap, column gap */
             list-style-type: none;
             padding-left: 0;
         }
-
+        
         .projects li {
-            margin-bottom: 8px;
             font-size: 0.95em;
         }
-
+        
         .projects a {
             text-decoration: none;
             color: #0044cc;
         }
-
+        
         .projects a:hover {
             text-decoration: underline;
         }
@@ -76,8 +79,8 @@
             <div class="projects">
                 <h2>Projects:</h2>
                 <ul>
-                    <li><a href="./1/indexzero.html">Project 1</a></li>
-                    <!-- add more <li>Project links</li> as needed -->
+                    <li><a href="./1/indexzero.html">Project 0</a></li>
+                    <li><a href="#">Project 1</a></li>
                 </ul>
             </div>
         </div>
