@@ -5,14 +5,77 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 40px;
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;  /* vertically align image and text */
+            gap: 40px;            /* space between image and text */
+        }
+
+        /* Left column (image) */
+        .container img {
+            max-width: 250px;     /* scale image */
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Right column (text) */
+        .text {
+            flex: 1;
+        }
+
+        .text h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .text p {
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        /* Project links */
+        .projects {
+            font-size: 0.95em; /* smaller font */
+            list-style-type: none; /* remove bullets */
+            padding: 0;
+        }
+
+        .projects li {
+            margin: 6px 0;
+        }
+
+        .projects a {
+            text-decoration: none;
+            color: #0073e6;
+        }
+
+        .projects a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <h1>Ryan Nava's (mossman's) CS 180 Portfolio</h1>
-    <img src="mediahomepage/HARD Background Removed.png">
-    <p>myself</p>
-    <a href="./1/indexzero.html">Project 1</a>
+    <div class="container">
+        <!-- Left: your photo -->
+        <img src="mediahomepage/HARD Background Removed.png" alt="Ryan Nava">
+
+        <!-- Right: portfolio text + links -->
+        <div class="text">
+            <h1>Ryan Nava's (mossman's) CS 180 Portfolio</h1>
+            <p>Myself</p>
+
+            <ul class="projects">
+                <li><a href="./1/indexzero.html">Project 1</a></li>
+                <li><a href="./2/index.html">Project 2</a></li>
+                <li><a href="./3/index.html">Project 3</a></li>
+                <!-- Add more as you go -->
+            </ul>
+        </div>
+    </div>
 </body>
 </html>
