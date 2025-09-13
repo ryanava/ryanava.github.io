@@ -100,7 +100,7 @@
         anchor channel. For both image matching metrics,
         an array is aligned with an anchor array at a certain displacement. Choosing the displacement that best aligns the images
         is done by searching over a window of possible displacements, rolling the input array in the direction of a given
-        displacement, and then calculating some equation For Euclidean Distance the equation is: 
+        displacement, and then calculating some equation. For Euclidean Distance the equation is: 
         sqrt(sum(sum((input_array - anchor_array).^2))), whereas for NCC it is: (image1./||image1|| and image2./||image2||). If the
         equation output is closest to zero (Euclidean Distance) or closest to 1 (NCC) then that displacement is the best displacement.
         This is because Euclidean Distance measures the absolute difference in pixel intesity between two arrays, so two images will be aligned
@@ -278,6 +278,7 @@
 
 </body>
 </html>
+
 
 
 
