@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Prokudin-Gorskii Image Alignment Project</title>
+    <title>Project 1: Prokudin-Gorskii Image Alignment</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -36,9 +36,6 @@
             font-size: 0.9em;
             color: #555;
         }
-        .bells-whistles {
-            margin-top: 50px;
-        }
         .row {
             display: flex;
             justify-content: space-around;
@@ -55,114 +52,54 @@
 </head>
 <body>
 
-    <h1>Prokudin-Gorskii Image Alignment Project</h1>
+    <h1>Project 1: Prokudin-Gorskii Image Alignment</h1>
 
     <p>
-        Sergei Mikhailovich Prokudin-Gorskii (1863-1944) [Сергей Михайлович Прокудин-Горский, to his Russian friends] was a man well ahead of his time. Convinced as early as 1907 that color photography was the wave of the future, he won the Tzar's special permission to travel across the vast Russian Empire and take color photographs of everything he saw, including the only color portrait of Leo Tolstoy. He recorded three exposures of every scene onto a glass plate using red, green, and blue filters. Although his projection plans never materialized, his RGB glass plate negatives survived and were digitized by the Library of Congress.
+        Sergei Mikhailovich Prokudin-Gorskii was a Russian photographer who documented early 20th century Russia through three-image color photography.
+        He recorded three exposures of every scene onto a glass plate using red, green, and blue filters. Although he was never able to see his black and white plates turned into a single color image, his RGB glass plate negatives were digitized and now are being turned by me, over 100 years later, into color photographs.
     </p>
 
     <h2>Overview</h2>
     <p>
-        The goal of this project is to take the digitized Prokudin-Gorskii glass plate images and, using image processing techniques, automatically produce a color image with minimal visual artifacts. This involves extracting the three color channels, stacking them, and aligning them to form a single RGB image. The Library of Congress aligned their images using [condensed explanation about their method here].
+        I will turn the digitized Prokudin-Gorskii plates and into a color image with minimal visual artifacts by using image alignment and automatic cropping software. This involves extracting the three color channels, aligning each channel to a consistent anchor channel, stacking them, and then cropping any black borders or color streaks/splotches.
     </p>
 
     <h2>Approach</h2>
     <p>
-        <!-- Filler text for your approach -->
         [Describe your approach here: algorithms used, challenges faced, etc.]
     </p>
 
     <h2>Example Images</h2>
     <table class="image-table">
         <tr>
-            <td><img src="example1.jpg" alt="Example 1"><div class="image-caption">Title 1<br>Displacement: ___</div></td>
-            <td><img src="example2.jpg" alt="Example 2"><div class="image-caption">Title 2<br>Displacement: ___</div></td>
-            <td><img src="example3.jpg" alt="Example 3"><div class="image-caption">Title 3<br>Displacement: ___</div></td>
-            <td><img src="example4.jpg" alt="Example 4"><div class="image-caption">Title 4<br>Displacement: ___</div></td>
+            <td><img src="cathedral.png" alt="Cathedral"><div class="image-caption">Cathedral<br>Displacement: ___</div></td>
+            <td><img src="church.png" alt="Church"><div class="image-caption">Church<br>Displacement: ___</div></td>
+            <td><img src="emir.png" alt="Emir"><div class="image-caption">Emir<br>Displacement: ___</div></td>
+            <td><img src="selfPortrait.png" alt="Self Portrait"><div class="image-caption">Self Portrait<br>Displacement: ___</div></td>
         </tr>
         <tr>
-            <td><img src="example5.jpg" alt="Example 5"><div class="image-caption">Title 5<br>Displacement: ___</div></td>
-            <td><img src="example6.jpg" alt="Example 6"><div class="image-caption">Title 6<br>Displacement: ___</div></td>
-            <td><img src="example7.jpg" alt="Example 7"><div class="image-caption">Title 7<br>Displacement: ___</div></td>
-            <td><img src="example8.jpg" alt="Example 8"><div class="image-caption">Title 8<br>Displacement: ___</div></td>
+            <td><img src="harvesters.png" alt="Harvesters"><div class="image-caption">Harvesters<br>Displacement: ___</div></td>
+            <td><img src="icon.png" alt="Icon"><div class="image-caption">Icon<br>Displacement: ___</div></td>
+            <td><img src="italil.png" alt="Italil"><div class="image-caption">Italil<br>Displacement: ___</div></td>
+            <td><img src="siren.png" alt="Siren"><div class="image-caption">Siren<br>Displacement: ___</div></td>
         </tr>
         <tr>
-            <td><img src="example9.jpg" alt="Example 9"><div class="image-caption">Title 9<br>Displacement: ___</div></td>
-            <td><img src="example10.jpg" alt="Example 10"><div class="image-caption">Title 10<br>Displacement: ___</div></td>
-            <td><img src="example11.jpg" alt="Example 11"><div class="image-caption">Title 11<br>Displacement: ___</div></td>
-            <td><img src="example12.jpg" alt="Example 12"><div class="image-caption">Title 12<br>Displacement: ___</div></td>
-        </tr>
-        <tr>
-            <td><img src="example13.jpg" alt="Example 13"><div class="image-caption">Title 13<br>Displacement: ___</div></td>
-            <td><img src="example14.jpg" alt="Example 14"><div class="image-caption">Title 14<br>Displacement: ___</div></td>
-            <td></td>
-            <td></td>
+            <td><img src="lastochikino.png" alt="Lastochikino"><div class="image-caption">Lastochikino<br>Displacement: ___</div></td>
+            <td><img src="lugano.png" alt="Lugano"><div class="image-caption">Lugano<br>Displacement: ___</div></td>
+            <td><img src="melons.png" alt="Melons"><div class="image-caption">Melons<br>Displacement: ___</div></td>
+            <td><img src="monastery.png" alt="Monastery"><div class="image-caption">Monastery<br>Displacement: ___</div></td>
         </tr>
     </table>
 
-    <h2>Prokudin-Gorskii Collection</h2>
+    <h2>Chosen Images</h2>
     <table class="image-table">
         <tr>
-            <td><img src="pg1.jpg" alt="PG 1"><div class="image-caption">Title 1<br>Displacement: ___</div></td>
-            <td><img src="pg2.jpg" alt="PG 2"><div class="image-caption">Title 2<br>Displacement: ___</div></td>
-            <td><img src="pg3.jpg" alt="PG 3"><div class="image-caption">Title 3<br>Displacement: ___</div></td>
-            <td><img src="pg4.jpg" alt="PG 4"><div class="image-caption">Title 4<br>Displacement: ___</div></td>
-            <td><img src="pg5.jpg" alt="PG 5"><div class="image-caption">Title 5<br>Displacement: ___</div></td>
+            <td><img src="clothes.png" alt="Clothes"><div class="image-caption">Clothes<br>Displacement: ___</div></td>
+            <td><img src="rug.png" alt="Rug"><div class="image-caption">Rug<br>Displacement: ___</div></td>
+            <td><img src="sunset.png" alt="Sunset"><div class="image-caption">Sunset<br>Displacement: ___</div></td>
+            <td><img src="lake.png" alt="Lake"><div class="image-caption">Lake<br>Displacement: ___</div></td>
         </tr>
     </table>
-
-    <div class="bells-whistles">
-        <h2>Bells and Whistles</h2>
-        <h3>Automatic Cropping</h3>
-        <p>
-            To improve the visual quality of the final images, I implemented automatic cropping to remove black borders and excess color borders. The images below show three stages: first the aligned image without cropping, then after removing black borders, and finally after removing color borders. This helps eliminate unwanted artifacts and focuses on the main subject of the photograph.
-        </p>
-
-        <div class="row">
-            <div>
-                <img src="crop1_before.jpg" alt="Aligned Image No Cropping">
-                <div>Aligned Image No Cropping</div>
-            </div>
-            <div>
-                <img src="crop1_black.jpg" alt="Automatic Cropping Black Borders">
-                <div>Automatic Cropping Black Borders</div>
-            </div>
-            <div>
-                <img src="crop1_color.jpg" alt="Automatic Cropping Color Borders">
-                <div>Automatic Cropping Color Borders</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div>
-                <img src="crop2_before.jpg" alt="Aligned Image No Cropping">
-                <div>Aligned Image No Cropping</div>
-            </div>
-            <div>
-                <img src="crop2_black.jpg" alt="Automatic Cropping Black Borders">
-                <div>Automatic Cropping Black Borders</div>
-            </div>
-            <div>
-                <img src="crop2_color.jpg" alt="Automatic Cropping Color Borders">
-                <div>Automatic Cropping Color Borders</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div>
-                <img src="crop3_before.jpg" alt="Aligned Image No Cropping">
-                <div>Aligned Image No Cropping</div>
-            </div>
-            <div>
-                <img src="crop3_black.jpg" alt="Automatic Cropping Black Borders">
-                <div>Automatic Cropping Black Borders</div>
-            </div>
-            <div>
-                <img src="crop3_color.jpg" alt="Automatic Cropping Color Borders">
-                <div>Automatic Cropping Color Borders</div>
-            </div>
-        </div>
-    </div>
 
 </body>
 </html>
