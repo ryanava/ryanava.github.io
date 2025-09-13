@@ -51,6 +51,11 @@
             text-decoration: underline;
             color: #111;
         }
+        #note {
+            text-align: center;
+            color: #111;
+            font-size: 1em;
+        }
     </style>
 </head>
 <body>
@@ -64,17 +69,61 @@
 
     <h2>Overview</h2>
     <p>
-        I will turn the digitized Prokudin-Gorskii plates and into a color image with minimal visual artifacts by using image alignment and automatic cropping software. This involves extracting the three color channels, aligning each channel to a consistent anchor channel, stacking them, and then cropping any black borders or color streaks/splotches.
+        I will turn the digitized Prokudin-Gorskii plates (a 3-channel image) into a color image with minimal visual artifacts by using image alignment and automatic cropping techniques. This involves extracting the three color channels, aligning each channel to a consistent anchor channel, stacking them on top of each other, and then cropping any black borders or color streaks/splotches.
     </p>
 
     <h2>Approach</h2>
+    <h3>Naive and Image Pyramid Solution to Alignment</h3>
     <p>
-        [Describe your approach here: algorithms used, challenges faced, etc.]
+        I aligned images in two ways. The naive solution involved using two image matching metrics: Normalized Cross Correlation (NCC)
+        and L2 Norm (Euclidean Distance). While these photos utilized Normalized Cross Correlation (NCC), 
+        my code can align images properly with both NCC and the L2 Norm (Euclidean Distance).
+        First I sliced the 3-channel image into individual channel arrays. Then I aligned 2 of the channels individually to a chosen
+        anchor channel. For both image matching metrics,
+        an array is aligned with an anchor array at a certain displacement. Choosing the displacement that best aligns the images
+        is done by searching over a window of possible displacements, rolling the input array in the direction of a given
+        displacement, and then calculating some equation For Euclidean Distance the equation is: 
+        sqrt(sum(sum((input_array - anchor_array).^2))), whereas for NCC it is: (image1./||image1|| and image2./||image2||). If the
+        equation output is closest to zero (Euclidean Distance) or closest to 1 (NCC) then that displacement is the best displacement.
+        This is because Euclidean Distance measures the absolute difference in pixel intesity between two arrays, so two images will be aligned
+        if the sum of their squared differences is very small or near zero. In contrast, NCC measures the cosine similarity between two image vectors,
+        with a perfect correlation being 1 and an inverse correlation being -1, so an image is aligned if the dot product between two normalized
+        vectors is near 1. Calculating these displacements is quick if done on a small scale image (.jpg), but when done on a large scale image (.tif)
+        calculations take too long. Instead of just rolling and calculating an image matching metric for a 300x300 image you are now doing that on a 3000 x 3000 image.
+        To speed this up, I implemented an image pyramid. This works by aligning the image at a small scale by downsampling it, and then gradually resizing
+        it to its original size, checking smaller and smaller displacement windows as you move down the pyramid. This way it checks a large area with a small resolution array
+        and then makes minor adjustments with the larger images. For example, instead of checking a 50x50 displacement window on a 3000x3000 image, you
+        can check a 50x50 window on that same image but resized down to 100x100, then resize it to 200x200 and check a 25x25 window, and so on and so on.
+        This drastically speeds up the search while still aligning properly. The resizing effectively takes out every other row and column, and keeps doing
+        this each time you downsample (resize down). So an image may seem aligned at the top of the pyramid (when its smallest) but will still need minor
+        tweaks for each level of the pyramid to ensure the most accurate and proper alignment.
+        I found that using the green channel as an anchor produced the best alignments across all images. I also found that pre-cropping the image arbitrarily
+        before checking for alignment avoided issues with Euclidean Distance and NCC where it would be confused by the black bars on the edges of the image
+        and treat those lines as an actual part of the image and include their pixel values in the calculations.
+        XXXX
+        XXXX
+        XXXX
+    </p>
+    <br>
+    <h3>Bells and Whistles: Automatic Cropping</h3>
+    <br>
+    <p>
+        I did automatic cropping which removed both the black borders and the colored borders on the edges of my images. I first
+        converted my aligned images to grayscale to focus on only a single channel: the intensity of the pixel. I then went from each edge
+        inwards and checked  the given row or column's mean. If the mean of the next row/column was larger than the current row/column by a
+        certain amount, then i must have found a border going from black (low mean) to white (high mean) or just going from very dark to somewhat bright.
+        I noted everytime the difference in the mean's between each row/column crossed a certain threshold, and then added it to an array. I would
+        then crop the image according to the last dy or dx where that happened. I did a similar cropping procedure for color, but
+        instead of checking for difference in mean, I checked for a multitude of factors. I checked for splotches or peaks (areas where one of the three
+        channels on a pixel hit a value of 255 or 1). I also checked for pixels being above a certain number since most color splotches were bright or
+        peaked in their given channel, i.e. were above 230 or so. Then I checked for differences between channels for each pixel since a color border
+        pixel normally had massive differences between its maximum value in a channel and its minimum value in another channel. 
     </p>
     <br>
     <br>
 
    <h2 id="example-images">Example Images</h2>
+    <p id="note">Note: Cathedral, Monastery, and Tobolsk were aligned using single-scale alignment</p>
     
     <br>
 
@@ -163,6 +212,7 @@
 
 </body>
 </html>
+
 
 
 
