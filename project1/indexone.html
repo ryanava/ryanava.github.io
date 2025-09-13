@@ -56,10 +56,28 @@
             color: #111;
             font-size: 1em;
         }
+        .intro-text {
+            flex: 2;
+            text-align: left;
+        }
+        .intro-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        .intro-image {
+            flex: 1;
+        }
+
+        .intro-image img {
+            max-width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 <body>
-
+    <div class="intro-container">
+    <div class="intro-text">
     <h1>Project 1: Prokudin-Gorskii Image Alignment</h1>
 
     <p>
@@ -122,6 +140,13 @@
         The values I tweaked were how far in to check for cropping, the threshold for difference in mean for the black border cropping, and the exact amount a pixel
         had to be larger than or the exact value that a difference between the max and min values across the 3 channels would have to be.
     </p>
+    </div>
+
+     <div class="intro-image">
+        <img src="mediaone/selfPortrait.png" alt="Prokudin-Gorskii Example" />
+    </div>
+    </div>
+    
     <br>
     <br>
 
@@ -215,3 +240,4 @@
 
 </body>
 </html>
+
