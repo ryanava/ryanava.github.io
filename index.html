@@ -5,12 +5,88 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 40px;
+            background-color: OliveDrab;
+        }
+
+        .container {
+            display: flex;
+            align-items: flex-start;
+            gap: 40px;
+            color: #F0EAD6;
+        }
+
+        .image-section {
+            text-align: center;
+            flex: 1;
+        }
+
+        .image-section img {
+            width: 300px;
+            height: auto;
+            border: none;
+        }
+
+        .image-section p {
+            font-style: bold;
+            margin-top: 10px;
+        }
+
+        .text-section {
+            flex: 2;
+        }
+
+        .text-section h1 {
+            margin-top: 0;
+        }
+
+        .projects {
+            margin-top: 20px;
+        }
+
+
+        .projects ul {
+            display: grid;
+            grid-template-columns: repeat(5, auto); /* 5 per row for my table of projects no no lists */
+            gap: 15px 30px; /* row gap, column gap */
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .projects li {
+            font-size: 0.95em;
+        }
+        
+        .projects a {
+            text-decoration: none;
+            color: #F0EAD6;
+            font-style: italic;
+        }
+        
+        .projects a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to my Imaginarium!!</h1>
-    <a href="./1/indexzero.html">Project 1</a>
+    <div class="container">
+        <!-- Left: Image -->
+        <div class="image-section">
+            <img src="mediahomepage/HARD Background Removed.png" alt="Ryan Nava">
+            <p>myself</p>
+        </div>
+
+        <!-- Right: Text -->
+        <div class="text-section">
+            <h1>Ryan Nava's (mossman's) CS 180 Portfolio</h1>
+            <div class="projects">
+                <h2>Projects:</h2>
+                <ul>
+                    <li><a href="./1/indexzero.html">Project 0</a></li>
+                    <li><a href="#">Project 1</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
