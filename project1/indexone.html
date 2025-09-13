@@ -100,9 +100,10 @@
         I found that using the green channel as an anchor produced the best alignments across all images. I also found that pre-cropping the image arbitrarily
         before checking for alignment avoided issues with Euclidean Distance and NCC where it would be confused by the black bars on the edges of the image
         and treat those lines as an actual part of the image and include their pixel values in the calculations.
-        XXXX
-        XXXX
-        XXXX
+        The values I had to tweak where what scale worked best for the pyramid (i found a scale of 4 worked best as it didnt have too many layers, so there were less checks but
+        it also wasnt such a high scale that alignment would suffer. think of the case where the scale is 100 and so it resizes down by 100, immediately hits the base image size, aligns on that
+        small image, and then immediately checks on the full size image. the alignment is likely to be off unless we spend a lot of time searching the larger image, which effectively
+        defeats the point of the image pyramid).
     </p>
     <br>
     <h3>Bells and Whistles: Automatic Cropping</h3>
@@ -118,6 +119,8 @@
         channels on a pixel hit a value of 255 or 1). I also checked for pixels being above a certain number since most color splotches were bright or
         peaked in their given channel, i.e. were above 230 or so. Then I checked for differences between channels for each pixel since a color border
         pixel normally had massive differences between its maximum value in a channel and its minimum value in another channel. 
+        The values I tweaked were how far in to check for cropping, the threshold for difference in mean for the black border cropping, and the exact amount a pixel
+        had to be larger than or the exact value that a difference between the max and min values across the 3 channels would have to be.
     </p>
     <br>
     <br>
@@ -188,6 +191,11 @@
     </div>
     
     <h2 id="chosen-images">Chosen Images</h2>
+
+    <div class="image-wrapper">
+        <div class="image-caption">Lake</div>
+        <img src="mediaone/lake.png" alt="Lake">
+    </div>
     
     <div class="image-wrapper">
         <div class="image-caption">Clothes</div>
@@ -203,26 +211,7 @@
         <div class="image-caption">Sunset</div>
         <img src="mediaone/sunset.png" alt="Sunset">
     </div>
-    
-    <div class="image-wrapper">
-        <div class="image-caption">Lake</div>
-        <img src="mediaone/lake.png" alt="Lake">
-    </div>
 
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
