@@ -122,6 +122,11 @@
         it also wasnt such a high scale that alignment would suffer. think of the case where the scale is 100 and so it resizes down by 100, immediately hits the base image size, aligns on that
         small image, and then immediately checks on the full size image. the alignment is likely to be off unless we spend a lot of time searching the larger image, which effectively
         defeats the point of the image pyramid).
+        I noticed soeme images can never be aligned using only 2 dimensions because only small parts of images are misaligned not the whole image. This
+        happens mainly in shots of fast moving water or crowds that are unable to keep still. I noticed on an image of children every face or hand was misaligned but
+        the background was aligned. In a similar shot with adults they were misaligned very rarely, usually if they were standing in uncomfortable positions. 
+        However, I do not count this as misalignment per the project's limitations since no amount of ncc/euclidean or even pyramid shift would fix this alignment,
+        since shifting it to the proper place would dealign the rest of the image.
     </p>
     <br>
     <h3>Bells and Whistles: Automatic Cropping</h3>
@@ -275,6 +280,7 @@
 
 </body>
 </html>
+
 
 
 
