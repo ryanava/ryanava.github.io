@@ -108,6 +108,8 @@
         with a perfect correlation being 1 and an inverse correlation being -1, so an image is aligned if the dot product between two normalized
         vectors is near 1. Calculating these displacements is quick if done on a small scale image (.jpg), but when done on a large scale image (.tif)
         calculations take too long. Instead of just rolling and calculating an image matching metric for a 300x300 image you are now doing that on a 3000 x 3000 image.
+    </p>
+    <p>
         To speed this up, I implemented an image pyramid. This works by aligning the image at a small scale by downsampling it, and then gradually resizing
         it to its original size, checking smaller and smaller displacement windows as you move down the pyramid. This way it checks a large area with a small resolution array
         and then makes minor adjustments with the larger images. For example, instead of checking a 50x50 displacement window on a 3000x3000 image, you
@@ -278,6 +280,7 @@
 
 </body>
 </html>
+
 
 
 
