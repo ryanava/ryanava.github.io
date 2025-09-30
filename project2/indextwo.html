@@ -178,32 +178,35 @@ this gaussian filtered image from the original image retains only the high frequ
 to the image to sharpen it. I also tried this on a image that was sharpened, blurred, and then sharpened again. However, this
 does not look the same it only retained the high frequencies of the blurred image not the high frequencies of the original image, since
 those were lost when I low pass / gaussian filter it and removed high frequencies</p>
+<pre><code>
+  def sharpen(input_image, alpha=1.0):
+    blurred = scipy_convolution_color(input_image, "gaussian", 9, 5)
+    mask = input_image - blurred
+    # need to clip because this will make it stray or wrap from 255
+    return np.clip(input_image + alpha * mask, 0, 255)
 
-
-
-
+def blur_then_sharpen(input_image, alpha=1.0):
+    first_sharpened_image = sharpen(input_image)
+    blur = scipy_convolution_color(first_sharpened_image, "gaussian", 9, 5)
+    return sharpen(blur)
+</code></pre>
 
 <h3>2.2 Hybrid Images</h3>
 <div class="image-placeholder">Add images/results here</div>
-<textarea placeholder="Write your answer here..."></textarea>
-
-
-<h3>Bells & Whistles: Hybrid Variations</h3>
-<div class="image-placeholder">Add images/results here</div>
-<textarea placeholder="Write your answer here..."></textarea>
-
+<p>I created a hybrid image (a static image that changes in interpretation as a function of viewing distance) by overlaying
+a high pass of one image (just the high frequencies) with a low pass of another image (just the low frequencies). From up
+close the high frequencies dominate, so we mainly see the high frequency image but at a distance the low frequencies are all 
+we can see. I used some alignment code to align all my images. I began with the images of Derek and his cat Nutmeg. I then did this
+with two of my own images, one of me and my cat, and another of my cat and lebron james. I then plotted the fourier transform
+of my low pass and high pass images compared to my original images to show which frequencies were being filtered out.</p>
 
 <h3>2.3 + 2.4 Image Blending (Oraple)</h3>
 <div class="image-placeholder">Add images/results here</div>
-<textarea placeholder="Write your answer here..."></textarea>
+<p></p>
 
-
-<h3>Bells & Whistles: Custom Blends</h3>
-<div class="image-placeholder">Add images/results here</div>
-<textarea placeholder="Write your answer here..."></textarea>
-</div>
 </body>
 </html>
+
 
 
 
