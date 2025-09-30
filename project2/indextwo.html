@@ -110,17 +110,6 @@ def binarize_gradient_magnitude(img, threshold=60):
       (precompute the combined kernel).
     </p>
 
-    <h4>Bells & Whistles: Gradient Orientations</h4>
-    <div class="images">
-      <!-- If you have a gradient-orientation image, name it e.g. '1.2 orientation.png' and put it here -->
-      <img src="mediatwo/1.2-orientation.png" alt="gradient orientation (optional)">
-    </div>
-    <p class="note">
-      You can compute orientation via <code>atan2(dy, dx)</code>. If you avoid built-in angle funcs, implement a safe atan2
-      approximation or compute angle sectors using dy/dx sign and ratio logic — then map to hue for visualization.
-    </p>
-  </div>
-
   <!-- PART 2 -->
   <div class="section">
     <h2>Part 2: Applications</h2>
@@ -177,6 +166,7 @@ def sharpen(input_image, alpha=1.0):
   </div>
 </body>
 </html>
+
 
 
 
