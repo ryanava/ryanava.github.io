@@ -27,8 +27,8 @@
 
     <h3>1.1 Convolution</h3>
     <div class="images">
-      <img src="../mediatwo/1.1-box.png" alt="1.1 box">
-      <img src="../mediatwo/1.1-dx-dy.png" alt="1.1 dx dy">
+      <img src="mediatwo/1.1-box.png" alt="1.1 box">
+      <img src="mediatwo/1.1-dx-dy.png" alt="1.1 dx dy">
     </div>
     <p>
       The runtime is nearly identical for greyscale images between my convolution and scipy's <code>convolve2d</code>,
@@ -75,10 +75,10 @@ def four_for_convolution(input_image, filter_type="box_filter", kernel_size=9):
 
     <h3>1.2 Partial Derivatives and Edges</h3>
     <div class="images">
-      <img src="../mediatwo/1.2-dx-dy.png" alt="1.2 dx dy">
-      <img src="../mediatwo/1.2-gm.png" alt="1.2 gradient magnitude">
-      <img src="../mediatwo/1.2-bgm.png" alt="1.2 binarized gradient magnitude">
-      <img src="../mediatwo/1.2-g-gm-bgm.png" alt="1.2 combined visuals">
+      <img src="mediatwo/1.2-dx-dy.png" alt="1.2 dx dy">
+      <img src="mediatwo/1.2-gm.png" alt="1.2 gradient magnitude">
+      <img src="mediatwo/1.2-bgm.png" alt="1.2 binarized gradient magnitude">
+      <img src="mediatwo/1.2-g-gm-bgm.png" alt="1.2 combined visuals">
     </div>
     <p>
       I used <code>scipy.signal.convolve2d</code> for the FD experiments. I computed partial derivatives Dx and Dy using
@@ -100,8 +100,8 @@ def binarize_gradient_magnitude(img, threshold=60):
 
     <h3>1.3 Gaussian & DoG Filters</h3>
     <div class="images">
-      <img src="../mediatwo/1.3-dog-filters.png" alt="1.3 dog filters">
-      <img src="../mediatwo/1.3-DoG-gm-bgm.png" alt="1.3 DoG gm bgm">
+      <img src="mediatwo/1.3-dog-filters.png" alt="1.3 dog filters">
+      <img src="mediatwo/1.3-DoG-gm-bgm.png" alt="1.3 DoG gm bgm">
     </div>
     <p>
       Using <code>cv2.getGaussianKernel</code> I built Gaussian kernels and formed DoG (difference of Gaussians). Applying
@@ -113,7 +113,7 @@ def binarize_gradient_magnitude(img, threshold=60):
     <h4>Bells & Whistles: Gradient Orientations</h4>
     <div class="images">
       <!-- If you have a gradient-orientation image, name it e.g. '1.2 orientation.png' and put it here -->
-      <img src="../mediatwo/1.2-orientation.png" alt="gradient orientation (optional)">
+      <img src="mediatwo/1.2-orientation.png" alt="gradient orientation (optional)">
     </div>
     <p class="note">
       You can compute orientation via <code>atan2(dy, dx)</code>. If you avoid built-in angle funcs, implement a safe atan2
@@ -127,8 +127,8 @@ def binarize_gradient_magnitude(img, threshold=60):
 
     <h3>2.1 Unsharp Mask</h3>
     <div class="images">
-      <img src="../mediatwo/2.1-sharpen-taj.png" alt="2.1 sharpen taj">
-      <img src="../mediatwo/2.1-sharpen-mine.png" alt="2.1 sharpen mine">
+      <img src="mediatwo/2.1-sharpen-taj.png" alt="2.1 sharpen taj">
+      <img src="mediatwo/2.1-sharpen-mine.png" alt="2.1 sharpen mine">
     </div>
     <p>
       I sharpened images by subtracting a Gaussian-blurred version (low-pass) from the original to obtain the high-frequency mask,
@@ -145,11 +145,11 @@ def sharpen(input_image, alpha=1.0):
 
     <h3>2.2 Hybrid Images</h3>
     <div class="images">
-      <img src="../mediatwo/2.2-d-and-n.png" alt="2.2 Derek and Nutmeg">
-      <img src="../mediatwo/2.2-low-high-hyb.png" alt="2.2 low/high hybrid">
-      <img src="../mediatwo/2.2-my-lhh.png" alt="2.2 my low/high hybrid">
-      <img src="../mediatwo/2.2.png" alt="2.2 other hybrid">
-      <img src="../mediatwo/2.2-fourrier.png" alt="2.2 fourier plots">
+      <img src="mediatwo/2.2-d-and-n.png" alt="2.2 Derek and Nutmeg">
+      <img src="mediatwo/2.2-low-high-hyb.png" alt="2.2 low/high hybrid">
+      <img src="mediatwo/2.2-my-lhh.png" alt="2.2 my low/high hybrid">
+      <img src="mediatwo/2.2.png" alt="2.2 other hybrid">
+      <img src="mediatwo/2.2-fourrier.png" alt="2.2 fourier plots">
     </div>
     <p>
       Hybrid images combine the low frequencies of one picture with the high frequencies of another. The Fourier transforms show
@@ -159,13 +159,13 @@ def sharpen(input_image, alpha=1.0):
 
     <h3>2.3 + 2.4 Image Blending (Oraple)</h3>
     <div class="images">
-      <img src="../mediatwo/2.3-stack1.png" alt="2.3 stack1">
-      <img src="../mediatwo/2.3-stack2.png" alt="2.3 stack2">
-      <img src="../mediatwo/2.3-stack3.png" alt="2.3 stack3">
+      <img src="mediatwo/2.3-stack1.png" alt="2.3 stack1">
+      <img src="mediatwo/2.3-stack2.png" alt="2.3 stack2">
+      <img src="mediatwo/2.3-stack3.png" alt="2.3 stack3">
     </div>
     <div class="images">
-      <img src="../mediatwo/2.3-oraple.png" alt="2.3 oraple">
-      <img src="../mediatwo/2.3-ryanemir.png" alt="2.3 ryanemir">
+      <img src="mediatwo/2.3-oraple.png" alt="2.3 oraple">
+      <img src="mediatwo/2.3-ryanemir.png" alt="2.3 ryanemir">
     </div>
     <p>
       I constructed Gaussian and Laplacian stacks and performed multi-scale blending for the orange+apple example (vertical seam).
@@ -177,6 +177,7 @@ def sharpen(input_image, alpha=1.0):
   </div>
 </body>
 </html>
+
 
 
 
