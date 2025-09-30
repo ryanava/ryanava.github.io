@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Project 1: Prokudin-Gorskii Image Alignment</title>
+    <title>ryanava.github.io</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -100,7 +100,7 @@
         anchor channel. For both image matching metrics,
         an array is aligned with an anchor array at a certain displacement. Choosing the displacement that best aligns the images
         is done by searching over a window of possible displacements, rolling the input array in the direction of a given
-        displacement, and then calculating some equation For Euclidean Distance the equation is: 
+        displacement, and then calculating some equation. For Euclidean Distance the equation is: 
         sqrt(sum(sum((input_array - anchor_array).^2))), whereas for NCC it is: (image1./||image1|| and image2./||image2||). If the
         equation output is closest to zero (Euclidean Distance) or closest to 1 (NCC) then that displacement is the best displacement.
         This is because Euclidean Distance measures the absolute difference in pixel intesity between two arrays, so two images will be aligned
@@ -108,9 +108,11 @@
         with a perfect correlation being 1 and an inverse correlation being -1, so an image is aligned if the dot product between two normalized
         vectors is near 1. Calculating these displacements is quick if done on a small scale image (.jpg), but when done on a large scale image (.tif)
         calculations take too long. Instead of just rolling and calculating an image matching metric for a 300x300 image you are now doing that on a 3000 x 3000 image.
-        To speed this up, I implemented an image pyramid. This works by aligning the image at a small scale by downsampling it, and then gradually resizing
-        it to its original size, checking smaller and smaller displacement windows as you move down the pyramid. This way it checks a large area with a small resolution array
-        and then makes minor adjustments with the larger images. For example, instead of checking a 50x50 displacement window on a 3000x3000 image, you
+    </p>
+    <p>
+        To speed this up, I implemented an image pyramid. This works by aligning the image at a small scale by downsampling it (resizing it down over and over by a certain scalar value), and then gradually resizing
+        it to its original size, checking smaller and smaller displacement windows as you move down the pyramid, with the smallest version of the image at the top and the original image at the bottom. This way it checks a large area with a small resolution array
+        and then makes minor adjustments as the images gradually increase insize. By the end, barely any displacements have to be checked for the largest image / bottom of the pyramid. For example, instead of checking a 50x50 displacement window on a 3000x3000 image, you
         can check a 50x50 window on that same image but resized down to 100x100, then resize it to 200x200 and check a 25x25 window, and so on and so on.
         This drastically speeds up the search while still aligning properly. The resizing effectively takes out every other row and column, and keeps doing
         this each time you downsample (resize down). So an image may seem aligned at the top of the pyramid (when its smallest) but will still need minor
@@ -122,10 +124,13 @@
         it also wasnt such a high scale that alignment would suffer. think of the case where the scale is 100 and so it resizes down by 100, immediately hits the base image size, aligns on that
         small image, and then immediately checks on the full size image. the alignment is likely to be off unless we spend a lot of time searching the larger image, which effectively
         defeats the point of the image pyramid).
+        I noticed soeme images can never be aligned using only 2 dimensions because only small parts of images are misaligned not the whole image. This
+        happens mainly in shots of fast moving water or crowds that are unable to keep still. I noticed on an image of children every face or hand was misaligned but
+        the background was aligned. In a similar shot with adults they were misaligned very rarely, usually if they were standing in uncomfortable positions. 
+        However, I do not count this as misalignment per the project's limitations since no amount of ncc/euclidean or even pyramid shift would fix this alignment,
+        since shifting it to the proper place would dealign the rest of the image.
     </p>
-    <br>
     <h3>Bells and Whistles: Automatic Cropping</h3>
-    <br>
     <p>
         I did automatic cropping which removed both the black borders and the colored borders on the edges of my images. I first
         converted my aligned images to grayscale to focus on only a single channel: the intensity of the pixel. I then went from each edge
@@ -142,8 +147,14 @@
     </p>
     </div>
 
-     <div class="intro-image">
-        <img src="mediaone/selfPortrait.png" alt="Prokudin-Gorskii Example" />
+    <div class="intro-image">
+            <img src="mediaone/arrow.png" alt="Arrow">
+    </div>
+    <div class="intro-image">
+            <img src="mediaone/arrow.png" alt="Arrow">
+    </div>
+    <div class="intro-image">
+            <img src="mediaone/arrow.png" alt="Arrow">
     </div>
     </div>
     
@@ -151,7 +162,7 @@
     <br>
 
    <h2 id="example-images">Example Images</h2>
-    <p id="note">Note: Cathedral, Monastery, and Tobolsk were aligned using single-scale alignment</p>
+    <h4 id="note">Note: Cathedral, Monastery, and Tobolsk were aligned using single-scale alignment</h4>
     
     <br>
 
@@ -226,18 +237,46 @@
         <div class="image-caption">Clothes</div>
         <img src="mediaone/clothes.png" alt="Clothes">
     </div>
-    
-    <div class="image-wrapper">
-        <div class="image-caption">Rug</div>
-        <img src="mediaone/rug.png" alt="Rug">
-    </div>
-    
-    <div class="image-wrapper">
-        <div class="image-caption">Sunset</div>
-        <img src="mediaone/sunset.png" alt="Sunset">
-    </div>
 
+    <div class="image-wrapper">
+        <div class="image-caption">Dam</div>
+        <img src="mediaone/dam.png" alt="Dam">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Forest Walk</div>
+        <img src="mediaone/forestWalk.png" alt="Forest Walk">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Land Church</div>
+        <img src="mediaone/landChurch.png" alt="Land Church">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Men Wood</div>
+        <img src="mediaone/menWood.png" alt="Men Wood">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Orange Lake</div>
+        <img src="mediaone/orangeLake.png" alt="Orange Lake">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Pretty Church</div>
+        <img src="mediaone/prettyChurch.png" alt="Pretty Church">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Stained Glass</div>
+        <img src="mediaone/stainedGlass.png" alt="Stained Glass">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Three People</div>
+        <img src="mediaone/threePeople.png" alt="Three People">
+    </div>
 
 </body>
 </html>
-
