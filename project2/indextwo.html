@@ -22,8 +22,101 @@ margin: 10px 0;
 
 <h3>1.1 Convolution</h3>
 <div class="image-placeholder">Add images/results here</div>
-<textarea placeholder="Write your answer here..."></textarea>
+<p> The runtime is nearly identical for greyscale images between my convolution and scipy's .convolve2d, although mine
+  is slightly slower with color images. To deal with padding boundaries I initially cropped but realized I was losing information,
+  so I ended up reflecting the boundaries like scipy did. I implemented my convolution with four for loops, and then two, saving time
+  by multiplying patches of the image by the kernel instead of going element by element. I implemented padding with zeroes. I ran my two
+  loop convolution against scipy's convolution on an image of me in grayscale using: a box filter, a Dx filter, and a Dy filter.
+  Here is my code for this section:</p>
+<pre><code class="language-python">def four_for_convolution(input_image, filter_type="box_filter", kernel_size=9):
+    if filter_type == "box_filter":
+        kernel_values = np.full((kernel_size, kernel_size), 1/(kernel_size*kernel_size))
+        kernel_array = np.flip(kernel_values)
+        pad_h = kernel_size // 2
+        pad_w = kernel_size // 2
+    if filter_type == "dx":
+        kernel_values = np.array([[-1, 0, 1]])
+        kernel_array = np.flip(kernel_values)
+        pad_h = 1
+        pad_w = 0
+    if filter_type == "dy":
+        kernel_values = np.array([[-1], [0], [1]])
+        kernel_array = np.flip(kernel_values)
+        pad_h = 0
+        pad_w = 1
+    input_width = input_image.shape[1]
+    input_height = input_image.shape[0]
+    output_image = np.empty((input_height, input_width))
 
+    # Pad the image with zeros
+    padded_image = np.pad(input_image, ((pad_h, pad_h), (pad_w, pad_w)), mode='constant', constant_values=0)
+
+    for y in np.arange(input_height):
+        for x in np.arange(input_width):
+            current_pixel = input_image[y,x] # 0,0 is top left, max,max is bottom right
+            #now do the kernel convolution
+            sum = 0
+            for j in np.arange(kernel_array.shape[1]):
+                for i in np.arange(kernel_array.shape[0]):
+                        # checks the bounds of x and y of current pixel
+                        hy = y + j
+                        hx = x + i
+                        sum += kernel_array[j, i] * padded_image[hy, hx]
+            output_image[y,x] = sum
+    return output_image
+
+#two four loops convolution
+def two_for_convolution(input_image, filter_type="box_filter", kernel_size=9):
+    if filter_type == "box_filter":
+        kernel_values = np.full((kernel_size, kernel_size), 1/(kernel_size*kernel_size))
+        kernel_array = np.flip(kernel_values)
+        pad_h = kernel_size // 2
+        pad_w = kernel_size // 2
+    if filter_type == "dx":
+        kernel_array = np.array([[-1, 0, 1]])
+        pad_h = 0
+        pad_w = 1
+    if filter_type == "dy":
+        kernel_array = np.array([[-1], [0], [1]])
+        pad_h = 1
+        pad_w = 0
+    input_width = input_image.shape[1]
+    input_height = input_image.shape[0]
+    output_image = np.empty((input_height, input_width))
+
+    # Pad the image with zeros
+    padded_image = np.pad(input_image, ((pad_h, pad_h), (pad_w, pad_w)), mode='constant', constant_values=0)
+
+    for y in np.arange(input_height):
+        for x in np.arange(input_width):
+            #remember this is y and x of the padded image not the input image
+            #it takes a subsection with padded zeroes if out of bounds
+            image_subsection = padded_image[y:y + kernel_array.shape[0], x:x+kernel_array.shape[1]]
+            # * is element wise multiplication @ is the matrix multiplcation
+            # just need to check out of bounds
+            #multiply arrays not pixels for each iteration of the loop
+            output_image[y][x] = np.sum(image_subsection * kernel_array)
+    output_image = crop_convolution(output_image, pad_h, pad_w)
+    return output_image
+
+#convolution calling scipy
+def scipy_convolution(input_image, filter_type="box_filter", kernel_size=9, sigma=5):
+    if filter_type == "box_filter":
+        kernel_array = np.flip(np.full((kernel_size, kernel_size), 1/(kernel_size*kernel_size)))
+    if filter_type == "dx":
+        kernel_array = np.flip(np.array([[-1, 0, 1]]))
+    if filter_type == "dy":
+        kernel_array = np.flip(np.array([[-1], [0], [1]]))
+    if filter_type == "gaussian":
+        g_1d = cv2.getGaussianKernel((6*sigma) + 1, sigma)
+        g_2d = np.outer(g_1d, g_1d)
+        kernel_array = np.flip(g_2d)
+    if filter_type == "DoG x":
+        kernel_array = np.flip(DoG_filter("x"))
+    if filter_type == "DoG y":
+        kernel_array = np.flip(DoG_filter("y"))
+    return scipy.signal.convolve2d(input_image, kernel_array, mode='same', boundary='symm')
+</code></pre>
 
 <h3>1.2 Partial Derivatives and Edges</h3>
 <div class="image-placeholder">Add images/results here</div>
@@ -71,3 +164,4 @@ margin: 10px 0;
 </div>
 </body>
 </html>
+
