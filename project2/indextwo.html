@@ -129,7 +129,7 @@ def scipy_convolution(input_image, filter_type="box_filter", kernel_size=9, sigm
   my threshold I choose 60 as it retained most of the cameraman's detail while reducing the visible noise on the ground. Although I did
   find threshold 20 to be more aesthetically pleasing with the snow-like noise texture, even if it did have too much detail for the cameraman. 
 </p>
-<code><pre>
+<pre><code>
   def gradient_magnitude_image(input_image):
     dx = scipy_convolution(input_image, filter_type="dx")
     dy = scipy_convolution(input_image, filter_type="dy")
@@ -139,6 +139,7 @@ def scipy_convolution(input_image, filter_type="box_filter", kernel_size=9, sigm
       input_image = (input_image * 255).astype(np.uint8)
       return (input_image > threshold)
 </code></pre>
+  
 <h3>1.3 Gaussian & DoG Filters</h3>
 <div class="image-placeholder">Add images/results here</div>
 <p>Even so, with just the difference operators Dx and Dy, the image contained a lot of noise that even binarizing the image
@@ -146,15 +147,23 @@ couldn't fix. To fix this I blurred the image using a gaussian kernel, and then 
 This got rid of almost all noise and made edges thicker and seemingly brighter. To make this faster I implemented DoG or
 derivate of gaussian filters which looks the same but convolves the gaussian kernel with D_x and D_y before convolving with the image, 
 which saves one convolution in total.</p>
+<pre><code>
+  def DoG_filter(type, sigma=2):
+    g_size = 6 * sigma + 1
+    g_1d = cv2.getGaussianKernel(g_size, sigma)
+    g_2d = np.outer(g_1d, g_1d)
+    input_image = np.flip(g_2d)
+    if type == "x":
+        DoG = scipy_convolution(input_image, "dx")
+    if type == "y":
+        DoG = scipy_convolution(input_image, "dy")
+    return DoG
 
-  Part 1.3. Construct Gaussian filters using cv2.getGaussianKernel, build DoG filters, and visualize them. Apply both Gaussian smoothing and DoG filters to the cameraman image. Compare these results with those from the finite difference method.
-
-
-<h3>Bells & Whistles: Gradient Orientations</h3>
-<div class="image-placeholder">Add images/results here</div>
-<textarea placeholder="Write your answer here..."></textarea>
-</div>
-
+  def gradient_magnitude_image_DoG(input_image):
+      dxog = scipy_convolution(input_image, filter_type="DoG x")
+      dyog = scipy_convolution(input_image, filter_type="DoG y")
+      return np.sqrt(np.square(dxog) + np.square(dyog))
+</code></pre>
 
 <div class="section">
 <h2>Part 2: Applications</h2>
@@ -186,6 +195,7 @@ which saves one convolution in total.</p>
 </div>
 </body>
 </html>
+
 
 
 
