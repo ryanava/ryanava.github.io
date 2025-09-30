@@ -171,7 +171,16 @@ which saves one convolution in total.</p>
 
 <h3>2.1 Unsharp Mask</h3>
 <div class="image-placeholder">Add images/results here</div>
-<textarea placeholder="Write your answer here..."></textarea>
+<p> I took a blurry image and sharpened it by subtracting low filters from my image to retain
+  only the high frequencies. This makes the image appear sharper because it has stronger high frequencies. I did so
+by running a gaussian filter on my image, which is a low pass filter. This means it only retains low frequencies. Subtracting
+this gaussian filtered image from the original image retains only the high frequencies / edges. I then added these edges back
+to the image to sharpen it. I also tried this on a image that was sharpened, blurred, and then sharpened again. However, this
+does not look the same it only retained the high frequencies of the blurred image not the high frequencies of the original image, since
+those were lost when I low pass / gaussian filter it and removed high frequencies</p>
+
+
+
 
 
 <h3>2.2 Hybrid Images</h3>
@@ -195,6 +204,7 @@ which saves one convolution in total.</p>
 </div>
 </body>
 </html>
+
 
 
 
