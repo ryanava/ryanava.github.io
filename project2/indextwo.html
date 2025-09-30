@@ -202,10 +202,16 @@ of my low pass and high pass images compared to my original images to show which
 
 <h3>2.3 + 2.4 Image Blending (Oraple)</h3>
 <div class="image-placeholder">Add images/results here</div>
-<p></p>
+<p> I created Gaussian and Laplacian stacks to blend together two images. A Gaussian stack is a series of images
+where each level in the stack is the previous layer's image with a gaussian filter applied, so it becomes blurrier and blurrier.
+A laplacian stack is similar in that each layer is gaussian layer i minus gaussian layer i+1 so it displayes edges but each
+sucessive image is sharpening a blurrier image. I applied these stacks to the Oraple on a vertical seam. I did the same for a image
+of myself and my friend in makeup. I then did this with my friend's eyes and her dog using an irregular mask, but both use the same process
+and logic as described below. </p>
 
 </body>
 </html>
+
 
 
 
