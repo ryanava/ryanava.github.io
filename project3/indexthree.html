@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ryanava.github.io</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        p {
+            max-width: 800px;
+        }
+        img {
+            max-width: 100%
+        }
+       .image-caption {
+            margin-top: 10px;
+            font-size: 1.5em;
+            color: #111;
+            font-weight: bold;
+            text-align: center;
+        }
+        .row {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+        }
+        .row div {
+            text-align: center;
+        }
+        .row img {
+            max-width: 300px;
+            border: 1px solid #ccc;
+        }
+        #example-images {
+            font-size: 3em;
+            text-align: center;
+            text-decoration: underline;
+            color: #111;
+        }
+        #chosen-images {
+            font-size: 3em;
+            text-align: center;
+            text-decoration: underline;
+            color: #111;
+        }
+        #note {
+            text-align: center;
+            color: #111;
+            font-size: 1em;
+        }
+        .intro-text {
+            flex: 2;
+            text-align: left;
+        }
+        .intro-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        .intro-image {
+            flex: 1;
+        }
+
+        .intro-image img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="intro-container">
+    <div class="intro-text">
+    <h1>Project 3a: Image Warping and Mosaicing</h1>
+
+    <h2>Overview</h2>
+    <p>
+      a
+    </p>
+
+    <h2>Approach</h2>
+    <h3>Naive and Image Pyramid Solution to Alignment</h3>
+    <p>
+       a
+    </p>
+
+    <h2>Shooting the Pictures</h2>
+    <p>
+       I chose these images with projective transformations between them ( a fixed center of projection with the camera rotated.
+    </p>
+    <p>
+       my first set of images
+    </p>
+    <p>
+       my second set of images
+    </p>
+    <p>
+       my third set of images
+    </p>
+
+    <h2>Recover Homographies</h2>
+    <p>
+       This is my computeH function. 
+    </p>
+    <p>
+       Here are my correspondences (the pts scattered onto the normal images prewarp) for the first set of images and here in written form is the system of equations (Ab) and the recovered homography matrix
+      (H) for im1 to im2 and im3 to im2
+    </p>
+    <p>
+       Here are my correspondences for the second set of images and here in written form is the system of equations (Ab) and the recovered homography matrix
+      (H) for im1 to im2 and im3 to im2
+    </p>
+    <p>
+       Here are my correspondences for the third set of images and here in written form is the system of equations (Ab) and the recovered homography matrix
+      (H) for im1 to im2 and im3 to im2
+    </p>
+
+    <h2>Warp the Images</h2>
+    <p>
+       Here is the code for bilinear and how it warps an example image RECTIFICATION #1 (im not doing this for all)
+    </p>
+    <p>
+       Here is the code for nearest neighbor and how it warps an example image RECTIFICATION #1 (im not doing this for all)
+    </p>
+    <p>
+       Here is the code for bilinear and how it warps an example image RECTIFICATION #2 (im not doing this for all)
+    </p>
+    <p>
+       Here is the code for nearest neighbor and how it warps an example image RECTIFICATION #2 (im not doing this for all)
+    </p>
+    <h2>Blend the images into a mosaic</h2>
+    <p> 
+      Here is my code and how it works
+    </p>
+    <p> 
+      Here are the original three images and here is the mosaic #1
+    </p>
+    <p> 
+      Here are the original three images and here is the mosaic #2
+    </p>
+    <p> 
+      Here are the original three images and here is the mosaic #3
+    </p>
+    </div>
+
+    <div class="intro-image">
+            <img src="mediaone/arrow.png" alt="Arrow">
+    </div>
+    <div class="intro-image">
+            <img src="mediaone/arrow.png" alt="Arrow">
+    </div>
+    <div class="intro-image">
+            <img src="mediaone/arrow.png" alt="Arrow">
+    </div>
+    </div>
+    
+    <br>
+    <br>
+
+   <h2 id="example-images">Example Images</h2>
+    <h4 id="note">Note: Cathedral, Monastery, and Tobolsk were aligned using single-scale alignment</h4>
+    
+    <br>
+
+    <div class="image-wrapper">
+        <div class="image-caption">Cathedral</div>
+        <img src="mediaone/cathedral.png" alt="Cathedral">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Church</div>
+        <img src="mediaone/church.png" alt="Church">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Emir</div>
+        <img src="mediaone/emir.png" alt="Emir">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Self Portrait</div>
+        <img src="mediaone/selfPortrait.png" alt="Self Portrait">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Harvesters</div>
+        <img src="mediaone/harvesters.png" alt="Harvesters">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Icon</div>
+        <img src="mediaone/icon.png" alt="Icon">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Italil</div>
+        <img src="mediaone/italil.png" alt="Italil">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Siren</div>
+        <img src="mediaone/siren.png" alt="Siren">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Lastochikino</div>
+        <img src="mediaone/lastochikino.png" alt="Lastochikino">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Lugano</div>
+        <img src="mediaone/lugano.png" alt="Lugano">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Melons</div>
+        <img src="mediaone/melons.png" alt="Melons">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Monastery</div>
+        <img src="mediaone/monastery.png" alt="Monastery">
+    </div>
+    
+    <h2 id="chosen-images">Chosen Images</h2>
+
+    <div class="image-wrapper">
+        <div class="image-caption">Lake</div>
+        <img src="mediaone/lake.png" alt="Lake">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Clothes</div>
+        <img src="mediaone/clothes.png" alt="Clothes">
+    </div>
+
+    <div class="image-wrapper">
+        <div class="image-caption">Dam</div>
+        <img src="mediaone/dam.png" alt="Dam">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Forest Walk</div>
+        <img src="mediaone/forestWalk.png" alt="Forest Walk">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Land Church</div>
+        <img src="mediaone/landChurch.png" alt="Land Church">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Men Wood</div>
+        <img src="mediaone/menWood.png" alt="Men Wood">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Orange Lake</div>
+        <img src="mediaone/orangeLake.png" alt="Orange Lake">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Pretty Church</div>
+        <img src="mediaone/prettyChurch.png" alt="Pretty Church">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Stained Glass</div>
+        <img src="mediaone/stainedGlass.png" alt="Stained Glass">
+    </div>
+    
+    <div class="image-wrapper">
+        <div class="image-caption">Three People</div>
+        <img src="mediaone/threePeople.png" alt="Three People">
+    </div>
+
+</body>
+</html>
