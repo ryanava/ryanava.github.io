@@ -221,6 +221,31 @@
     </div>
 
     <h2>Warp the Images</h2>
+    <p>
+        In the following images, I warped a source image to a rectangular shape by finding the Homography that would translate the four points 
+        I selected (4 points that I knew were a square or rectangle in the image, but that were distorted due to perspective) into four
+        pretermined points that made a perfect square or rectangle shape. I then cropped the warped image to display the part that rectified
+        the previously distorted shape back into a rectangle. 
+    </p>
+    <p>
+        To warp images using a given homography H,
+        I implemented inverse warping to avoid holes in the resulting image. For each pixel in the output image (u, v), I used H^-1 
+        to find its corresponding coordinates (x, y) in the source image. Otherwise, if we went over every (x, y) and warped it forward,
+        we might have pixels that land on the same point or images that dont land anywhere on the output images resulting in holes. When we 
+        inverse warp, the (x, y) coordinates may not land on a specific pixel, e.g. (x= 10.7 and y = 5.8). To figure out what pixel value it should
+        have from the source image, we use interpolation.
+        All 3 source images I rectified were warped using two interpolation methods: Bilinear and Nearest Neighbor. 
+        Here are the differences between
+        the two. Nearest Neighbor: the pixel value was copied from the closet pixel center -- (round(x - 0.5), round(y - 0.5)), with .5 used to indicate the center of a pixel. 
+        Bilinear: the pixel value is computed from the 4 closest pixel centers (top left, top right, bottom left, bottom right) of the square surrounding
+        (x, y). Each pixel value is multiplied by a weight that depends on how close that pixel center is to (x, y). 
+        
+    </p>
+    <p>
+        Bilinear interpolation produces smoother images by averaging the pixel value of the four nearest points but takes longer to run, while Nearest Neighbor interpolation produces
+        more jagged edges by copying the nearest pixel value, but it runs faster. The quality of bilinear is higher and worth the extra time since
+        bilinear interpolation is still fast and high resolution images with smoothed pixels is helpful in making mosaics align properly. 
+    </p>
     <p> 
         source image #1
     </p>
@@ -314,6 +339,7 @@
     <br>
 </body>
 </html>
+
 
 
 
