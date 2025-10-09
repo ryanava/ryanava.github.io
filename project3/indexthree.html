@@ -81,14 +81,14 @@
     <h1>Project 3a: Image Warping and Mosaicing</h1>
 
     <h2>Overview</h2>
-    p> The goal of this project was to explore the mathematics and implementation behind <b>image warping</b> and apply it to create an image <b>mosaic</b>. A mosaic is formed by aligning and blending multiple images of the same scene, captured from slightly different perspectives, into one seamless panorama. To achieve this, the project involves computing geometric transformations (homographies), warping images using those transformations, and finally blending the warped results into a single composite image. </p> <p> At a high level, this assignment walks through the full pipeline of how image stitching works: </p> <ul> <li><b>A.1: Shoot and Digitize Pictures</b> – Capture two or more images of the same scene with overlapping fields of view. The images should share a fixed center of projection (i.e., the camera rotates but does not move) to ensure a projective relationship between them.</li> <li><b>A.2: Recover Homographies</b> – Compute a <code>3×3</code> homography matrix <code>H</code> that maps points from one image to another using sets of manually selected point correspondences. This step establishes the mathematical relationship between the images.</li> <li><b>A.3: Warp the Images</b> – Using the computed homographies, warp one image into the coordinate system of another. This involves implementing <b>inverse warping</b> with both <b>Nearest Neighbor</b> and <b>Bilinear Interpolation</b> to resample pixel values correctly and avoid holes in the output image.</li> <li><b>A.4: Blend Images into a Mosaic</b> – Combine multiple warped images into one seamless composite. To reduce visible seams where images overlap, blending techniques such as <b>weighted averaging</b> or <b>Laplacian pyramid blending</b> are used.</li> </ul> <p> Throughout this process, the project avoids high-level built-in functions like <code>cv2.findHomography</code> or <code>cv2.warpPerspective</code> in favor of implementing the underlying math and interpolation logic manually. This provides a deeper understanding of how projective transformations, interpolation, and blending interact to produce high-quality mosaics. </p> <p> By the end of the project, I successfully implemented all core components from scratch — computing homographies, performing image warping, and blending the results — and created several mosaics that align and merge multiple images into a single coherent view. </p>
-
-    <h2>Approach</h2>
-    <h3>Naive and Image Pyramid Solution to Alignment</h3>
-    <p>
-       a
+    <p> The goal of this project was to explore the image warping and how to apply it to create an image mosaic.
+        A mosaic is formed by aligning and blending multiple images of the same scene, with the same center of projection 
+        (i.e., the camera rotates but does not move), but
+        with different perpsectives, into a (hpefully seamless) panorama.
+        Warping is achieved by selecting points on two images that correspond to the same objects
+        and then calculating a homography, which is a matrix that maps every set of points in one image exactly
+        to another set of points in the other image.
     </p>
-
     <h2>Shooting the Pictures</h2>
     <p>
        I chose these images with projective transformations between them ( a fixed center of projection with the camera rotated.
@@ -404,6 +404,7 @@
     <br>
 </body>
 </html>
+
 
 
 
