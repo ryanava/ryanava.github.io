@@ -97,29 +97,29 @@
        my first set of images
     </p>
         <div class="image-wrapper">
-            <div class="image-caption">Cathedral</div>
+            <div class="image-caption">Ryan's Room first angle</div>
             <img src="mediathree/r1source.jpeg" alt="Cathedral">
         </div>
         <div class="image-wrapper">
-            <div class="image-caption">Cathedral</div>
+            <div class="image-caption">Ryan's Room second angle</div>
             <img src="mediathree/r2source.jpeg" alt="Cathedral">
         </div>
         <div class="image-wrapper">
-            <div class="image-caption">Cathedral</div>
+            <div class="image-caption">Ryan's Room third angle</div>
             <img src="mediathree/r3source.jpeg" alt="Cathedral">
         </div>
     <p>
        my second set of images
         <div class="image-wrapper">
-            <div class="image-caption">Cathedral</div>
+            <div class="image-caption">Ethan's Room first angle</div>
             <img src="mediathree/e1source.png" alt="Cathedral">
         </div>
         <div class="image-wrapper">
-            <div class="image-caption">Cathedral</div>
+            <div class="image-caption">Ethan's Room second angle</div>
             <img src="mediathree/e2source.png" alt="Cathedral">
         </div>
         <div class="image-wrapper">
-            <div class="image-caption">Cathedral</div>
+            <div class="image-caption">Ethan's Room third angle</div>
             <img src="mediathree/e3source.png" alt="Cathedral">
         </div>
     </p>
@@ -127,15 +127,15 @@
        my third set of images
     </p>
         <div class="image-wrapper">
-            <div class="image-caption">Cathedral</div>
+            <div class="image-caption">Mishka's Room second angle</div>
             <img src="mediathree/m1source.png" alt="Cathedral">
         </div>
         <div class="image-wrapper">
-            <div class="image-caption">Cathedral</div>
+            <div class="image-caption">Mishka's Room second angle</div>
             <img src="mediathree/m2source.png" alt="Cathedral">
         </div>
         <div class="image-wrapper">
-            <div class="image-caption">Cathedral</div>
+            <div class="image-caption">Mishka's Room second angle</div>
             <img src="mediathree/m3source.png" alt="Cathedral">
         </div>
 
@@ -377,33 +377,37 @@
         
     <h2>Blend the images into a mosaic</h2>
     <p> 
-      Here is my code and how it works
+      My mosaic function has multiple steps:
+      1. Warp all images into alignment (using bilinear interpolation since its smoother)
+      2. Combine them into one large canvas
+      3. Blend overlaps smoothly using alpha masks that fall off to zero based on distance from the edges + laplacian stack
     </p>
-    <p> 
-      Here are the original three images and here is the mosaic #1
+    <p>
+        I warped image one to image 2 + image 3 to image 2. Then I placed them on a canvas big enough to fit the max value of each image's
+        offset + its width or height. I also allocated a mask for each canvas (with the parts containing the image set to 1). I kept track
+        of where each image was by creating an alpha mask during the warp function (basically whenever you actually set a pixel
+        in the output image thats within the min and max bounds of the warped corners, also set the coordinates in the alpha image to 1). Then
+        I then distance transformed the masks, which gradually turns the value from 1 to 0 based on how far away each pixel is from the edge of the mask,
+        which makes the blending softer and avoids harsh edges where the images overlap. I then ran these masks and the canvas through a
+        laplacian stack which made sure both high and low frequencies were blended with this distance transformed mask. 
     </p>
     <div class="image-wrapper">
-        <div class="image-caption">Cathedral</div>
+        <div class="image-caption">Ryan's Room Mosaic</div>
         <img src="mediathree/mosaic r.png" alt="Cathedral">
     </div>
-    <p> 
-      Here are the original three images and here is the mosaic #2
-    </p>
     <div class="image-wrapper">
-        <div class="image-caption">Cathedral</div>
+        <div class="image-caption">Ethan's Room Mosaic</div>
         <img src="mediathree/mosaic e.png" alt="Cathedral">
     </div>
-    <p> 
-      Here are the original three images and here is the mosaic #3
-    </p>
     <div class="image-wrapper">
-        <div class="image-caption">Cathedral</div>
+        <div class="image-caption">Mishka's Room Mosaic</div>
         <img src="mediathree/mosaic m.png" alt="Cathedral">
     </div>
     </div>
     <br>
 </body>
 </html>
+
 
 
 
