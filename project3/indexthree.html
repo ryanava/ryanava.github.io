@@ -22,7 +22,7 @@ p {
 
 img {
     max-width: 100%;
-    max-height: 90vh; /* fit screen height */
+    max-height: 70vh; /* fit screen height */
     height: auto;
     display: block;
     margin: auto;
@@ -317,5 +317,6 @@ Bilinear: the pixel value is computed from the 4 closest pixel centers (top left
     I warped image one to image 2 + image 3 to image 2. Then I placed them on a canvas big enough to fit the max value of each image's offset + its width or height. I also allocated a mask for each canvas (with the parts containing the image set to 1). I kept track of where each image was by creating an alpha mask during the warp function (basically whenever you actually set a pixel in the output image thats within the min and max bounds of the warped corners, also set the coordinates in the alpha image to 1). Then I then distance transformed the masks, which gradually turns the value from 1 to 0 based on how far away each pixel is from the edge of the mask, which makes the blending softer and avoids harsh edges where the images overlap. I then ran these masks and the canvas through a laplacian stack which made sure both high and low frequencies were blended with this distance transformed mask.
 </p>
 <div class="image-wrapper"> <div class="image-caption">Ryan's Room Mosaic</div> <img src="mediathree/mosaic r.png" alt="Cathedral"> </div> <div class="image-wrapper"> <div class="image-caption">Ethan's Room Mosaic</div> <img src="mediathree/mosaic e.png" alt="Cathedral"> </div> <div class="image-wrapper"> <div class="image-caption">Mishka's Room Mosaic</div> <img src="mediathree/mosaic m.png" alt="Cathedral"> </div> </div> <br> </body> </html>
+
 
 
