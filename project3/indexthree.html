@@ -94,53 +94,58 @@ img {
 <h1>Project 3a: Image Warping and Mosaicing</h1>
 <h2>Overview</h2>
 <p>
-The goal of this project was to explore the image warping and how to apply it to create an image mosaic. A mosaic is formed by aligning and blending multiple images of the same scene, with the same center of projection (i.e., the camera rotates but does not move), but with different perspectives, into a (hopefully seamless) panorama. Warping is achieved by selecting points on two images that correspond to the same objects and then calculating a homography, which is a matrix that maps every set of points in one image exactly to another set of points in the other image.
+    The goal of this project was to explore image warping and how to apply it to create an image mosaic. 
+    A mosaic is formed by aligning and blending multiple images of the same scene, with the same center of projection (i.e., the camera rotates but does not move), but with different perspectives, into a (hopefully seamless) panorama. Warping is achieved by selecting points on two images that correspond to the same objects and then calculating a homography, 
+    which is a matrix that maps every set of points in one image exactly to another set of points in the other image. Then the
+    seams of these images can be blended using masks and laplacian stacks to produce a seamless stich of all the image, producing
+    a panoramic effect.
 </p>
 <h2>Shooting the Pictures: A Story of Three Roommates</h2>
 <p>
 I chose these images with projective transformations between them (a fixed center of projection with the camera rotated).
+Each set of images is a different room in my house for each of my roommates (including me)
 </p>
 <h3>My first set of images</h3>
 
 <div class="image-wrapper">
 <div class="image-caption">Ryan's Room first angle</div>
-<img src="mediathree/r1source.jpeg" alt="Cathedral">
+<img src="mediathree/r1source.jpeg" alt="ryans room">
 </div>
 <div class="image-wrapper">
 <div class="image-caption">Ryan's Room second angle</div>
-<img src="mediathree/r2source.jpeg" alt="Cathedral">
+<img src="mediathree/r2source.jpeg" alt="ryans room">
 </div>
 <div class="image-wrapper">
 <div class="image-caption">Ryan's Room third angle</div>
-<img src="mediathree/r3source.jpeg" alt="Cathedral">
+<img src="mediathree/r3source.jpeg" alt="ryans room">
 </div>
 
 <p>My second set of images</p>
 <div class="image-wrapper">
 <div class="image-caption">Ethan's Room first angle</div>
-<img src="mediathree/e1source.png" alt="Cathedral">
+<img src="mediathree/e1source.png" alt="ethans room">
 </div>
 <div class="image-wrapper">
 <div class="image-caption">Ethan's Room second angle</div>
-<img src="mediathree/e2source.png" alt="Cathedral">
+<img src="mediathree/e2source.png" alt="ethans room">
 </div>
 <div class="image-wrapper">
 <div class="image-caption">Ethan's Room third angle</div>
-<img src="mediathree/e3source.png" alt="Cathedral">
+<img src="mediathree/e3source.png" alt="ethans room">
 </div>
 
 <p>My third set of images</p>
 <div class="image-wrapper">
 <div class="image-caption">Mishka's Room first angle</div>
-<img src="mediathree/m1source.png" alt="Cathedral">
+<img src="mediathree/m1source.png" alt="mishkas room">
 </div>
 <div class="image-wrapper">
 <div class="image-caption">Mishka's Room second angle</div>
-<img src="mediathree/m2source.png" alt="Cathedral">
+<img src="mediathree/m2source.png" alt="mishkas room">
 </div>
 <div class="image-wrapper">
 <div class="image-caption">Mishka's Room third angle</div>
-<img src="mediathree/m3source.png" alt="Cathedral">
+<img src="mediathree/m3source.png" alt="mishkas room">
 </div>
 
 <h2>Recover Homographies</h2>
@@ -246,19 +251,19 @@ H (im3 → im2) = [[ 5.52680039e-01 4.72553054e-02 2.48030983e+02]
 <p>Here are my correspondences for the third set of images</p>
 <div class="image-wrapper">
 <div class="image-caption">Mishka's Room Image 1 Correspondences (Image 1 --> Image 2)</div>
-<img src="mediathree/im1(1-2)m.png" alt="Cathedral">
+<img src="mediathree/im1(1-2)m.png" alt="mishkas room">
 </div>
 <div class="image-wrapper">
 <div class="image-caption">Mishka's Room Image 2 Correspondences (Image 1 --> Image 2)</div>
-<img src="mediathree/im2(1-2)m.png" alt="Cathedral">
+<img src="mediathree/im2(1-2)m.png" alt="mishkas room">
 </div>
 <div class="image-wrapper">
 <div class="image-caption">Mishka's Room Image 2 Correspondences (Image 3 --> Image 2)</div>
-<img src="mediathree/im2(3-2)m.png" alt="Cathedral">
+<img src="mediathree/im2(3-2)m.png" alt="mishkas room">
 </div>
 <div class="image-wrapper">
 <div class="image-caption">Mishka's Room Image 3 Correspondences (Image 3 --> Image 2)</div>
-<img src="mediathree/im3(3-2)m.png" alt="Cathedral">
+<img src="mediathree/im3(3-2)m.png" alt="mishkas room">
 </div>
 
 <h2>Warp the Images</h2>
@@ -273,41 +278,41 @@ Bilinear: the pixel value is computed from the 4 closest pixel centers (top left
 
 <div class="image-wrapper">
 <div class="image-caption">The Flagellation of Christ source image</div>
-<img src="mediathree/jesussource.png" alt="Cathedral">
+<img src="mediathree/jesussource.png" alt="christ">
 </div>
 <div class="image-wrapper">
 <div class="image-caption">The Flagellation of Christ Bilinear Interpolation</div>
-<img src="mediathree/bj.png" alt="Cathedral">
+<img src="mediathree/bj.png" alt="christ">
 </div>
 <div class="image-wrapper">
 <div class="image-caption">The Flagellation of Christ NN Interpolation</div>
-<img src="mediathree/nnj.png" alt="Cathedral">
+<img src="mediathree/nnj.png" alt="christ">
 </div>
 
 <div class="image-wrapper">
 <div class="image-caption">Last Supper source image</div>
-<img src="mediathree/lastsuppersource.jpg" alt="Cathedral">
+<img src="mediathree/lastsuppersource.jpg" alt="last supper">
 </div>
 <div class="image-wrapper">
 <div class="image-caption">Last Supper Bilinear Interpolation</div>
-<img src="mediathree/bls.png" alt="Cathedral">
+<img src="mediathree/bls.png" alt="last supper">
 </div>
 <div class="image-wrapper">
 <div class="image-caption">Last Supper NN Interpolation</div>
-<img src="mediathree/nnls.png" alt="Cathedral">
+<img src="mediathree/nnls.png" alt="last supper">
 </div>
 
 <div class="image-wrapper">
 <div class="image-caption">Chemical Brothers Poster source image</div>
-<img src="mediathree/cbsource.png" alt="Cathedral">
+<img src="mediathree/cbsource.png" alt="chemical brothers">
 </div>
 <div class="image-wrapper">
 <div class="image-caption">Chemical Brothers Poster Bilinear Interpolation</div>
-<img src="mediathree/cbb.png" alt="Cathedral">
+<img src="mediathree/cbb.png" alt="chemical brothers ">
 </div>
 <div class="image-wrapper">
 <div class="image-caption">Chemical Brothers Poster NN Interpolation</div>
-<img src="mediathree/cbnn.png" alt="Cathedral">
+<img src="mediathree/cbnn.png" alt="chemical brothers">
 </div>
 
 <h2>Blend the images into a mosaic</h2>
@@ -316,7 +321,13 @@ Bilinear: the pixel value is computed from the 4 closest pixel centers (top left
 <p> 
     I warped image one to image 2 + image 3 to image 2. Then I placed them on a canvas big enough to fit the max value of each image's offset + its width or height. I also allocated a mask for each canvas (with the parts containing the image set to 1). I kept track of where each image was by creating an alpha mask during the warp function (basically whenever you actually set a pixel in the output image thats within the min and max bounds of the warped corners, also set the coordinates in the alpha image to 1). Then I then distance transformed the masks, which gradually turns the value from 1 to 0 based on how far away each pixel is from the edge of the mask, which makes the blending softer and avoids harsh edges where the images overlap. I then ran these masks and the canvas through a laplacian stack which made sure both high and low frequencies were blended with this distance transformed mask.
 </p>
-<div class="image-wrapper"> <div class="image-caption">Ryan's Room Mosaic</div> <img src="mediathree/mosaic r.png" alt="Cathedral"> </div> <div class="image-wrapper"> <div class="image-caption">Ethan's Room Mosaic</div> <img src="mediathree/mosaic e.png" alt="Cathedral"> </div> <div class="image-wrapper"> <div class="image-caption">Mishka's Room Mosaic</div> <img src="mediathree/mosaic m.png" alt="Cathedral"> </div> </div> <br> </body> </html>
+<div class="image-wrapper"> 
+    <div class="image-caption">Ryan's Room Mosaic</div>
+    <img src="mediathree/mosaic r.png" alt="Cathedral">
+</div> 
+    <div class="image-wrapper"> 
+        <div class="image-caption">Ethan's Room Mosaic</div> <img src="mediathree/mosaic e.png" alt="Cathedral"> </div> <div class="image-wrapper"> <div class="image-caption">Mishka's Room Mosaic</div> <img src="mediathree/mosaic m.png" alt="Cathedral"> </div> </div> <br> </body> </html>
+
 
 
 
