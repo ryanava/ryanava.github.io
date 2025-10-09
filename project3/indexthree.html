@@ -81,9 +81,7 @@
     <h1>Project 3a: Image Warping and Mosaicing</h1>
 
     <h2>Overview</h2>
-    <p>
-      a
-    </p>
+    p> The goal of this project was to explore the mathematics and implementation behind <b>image warping</b> and apply it to create an image <b>mosaic</b>. A mosaic is formed by aligning and blending multiple images of the same scene, captured from slightly different perspectives, into one seamless panorama. To achieve this, the project involves computing geometric transformations (homographies), warping images using those transformations, and finally blending the warped results into a single composite image. </p> <p> At a high level, this assignment walks through the full pipeline of how image stitching works: </p> <ul> <li><b>A.1: Shoot and Digitize Pictures</b> – Capture two or more images of the same scene with overlapping fields of view. The images should share a fixed center of projection (i.e., the camera rotates but does not move) to ensure a projective relationship between them.</li> <li><b>A.2: Recover Homographies</b> – Compute a <code>3×3</code> homography matrix <code>H</code> that maps points from one image to another using sets of manually selected point correspondences. This step establishes the mathematical relationship between the images.</li> <li><b>A.3: Warp the Images</b> – Using the computed homographies, warp one image into the coordinate system of another. This involves implementing <b>inverse warping</b> with both <b>Nearest Neighbor</b> and <b>Bilinear Interpolation</b> to resample pixel values correctly and avoid holes in the output image.</li> <li><b>A.4: Blend Images into a Mosaic</b> – Combine multiple warped images into one seamless composite. To reduce visible seams where images overlap, blending techniques such as <b>weighted averaging</b> or <b>Laplacian pyramid blending</b> are used.</li> </ul> <p> Throughout this process, the project avoids high-level built-in functions like <code>cv2.findHomography</code> or <code>cv2.warpPerspective</code> in favor of implementing the underlying math and interpolation logic manually. This provides a deeper understanding of how projective transformations, interpolation, and blending interact to produce high-quality mosaics. </p> <p> By the end of the project, I successfully implemented all core components from scratch — computing homographies, performing image warping, and blending the results — and created several mosaics that align and merge multiple images into a single coherent view. </p>
 
     <h2>Approach</h2>
     <h3>Naive and Image Pyramid Solution to Alignment</h3>
@@ -143,80 +141,170 @@
 
     <h2>Recover Homographies</h2>
     <p>
-       This is my computeH function. The system of equations should be general (ah=b). Show the recovered homography matrix for one at minimum
+        Homographies are a 3x3 matrix that map one image to another. Given a set of points in image one, multiplying each point by the homography 
+        between image one and image two produces a corresponding set of points in image two. These correspond to the same real-world objects, 
+        but their (x, y) coordinates differ due to perspective shifts. Since both images share the same camera center (fixed center of projection), 
+        we know there exists a homography that can warp one image to match the perspective of the other.
     </p>
+    
     <p>
-       Here are my correspondences (the pts scattered onto the normal images prewarp) for the first set of images and here in written form is the system of equations (Ab) and the recovered homography matrix
-      (H) for im1 to im2 and im3 to im2
-        This is H: [[ 1.83437462e+00  5.57856823e-02 -1.38054126e+03]
-         [ 2.62756831e-01  1.58344337e+00 -3.86642908e+02]
-         [ 4.10616761e-04  1.96645290e-05  1.00000000e+00]]
-        started
-        This is H: [[ 4.43891537e-01 -4.08861421e-03  9.38074333e+02]
-         [-2.12246435e-01  8.32100326e-01  1.20356408e+02]
-         [-2.84353729e-04  5.28596268e-07  1.00000000e+00]]
+        To recover the homography that maps one image onto another, I implemented <code>computeH(im1_pts, im2_pts)</code>. 
+        The goal was to find the 3×3 matrix H that satisfies:
     </p>
+    <pre>
+        p' = H * p
+    </pre>
+    <p>
+        Where p and p' are points in <b>homogeneous coordinates</b>. In homogeneous form, a 2D point (x, y) is represented as (x, y, 1). 
+        The third coordinate allows translation, rotation, and scaling to be represented as a single linear matrix multiplication since
+        the true point in homogenous coordinates is x' = x/w and y' = y/w
+        After multiplying by H, we get:
+    </p>
+    <pre>
+        [x']   [h11 h12 h13] [x]
+        [y'] = [h21 h22 h23] [y]
+        [w']   [h31 h32 h33] [1]
+    </pre>
+    <p>
+        To get back to regular (non-homogenous) image coordinates, we divide by w':
+    </p>
+    <pre>
+        x' = (h11*x + h12*y + h13) / (h31*x + h32*y + h33)
+        y' = (h21*x + h22*y + h23) / (h31*x + h32*y + h33)
+    </pre>
+    
+    <p>
+        These two equations are nonlinear because of the denominator. To solve for the elements of H, we need the equation to be linear, so we rearrange them:
+    </p>
+    <pre>
+        x'*(h31*x + h32*y + h33) = h11*x + h12*y + h13
+        y'*(h31*x + h32*y + h33) = h21*x + h22*y + h23
+    </pre>
+    <p>
+        Moving all terms to one side and grouping coefficients gives:
+    </p>
+    <pre>
+        0 = h11*x + h12*y + h13 - h31*x*x' - h32*y*x' - h33*x'
+        0 = h21*x + h22*y + h23 - h31*x*y' - h32*y*y' - h33*y'
+    </pre>
+    <p>
+        Since h33 is a scalar, we can fix it to 1. The remaining 8 unknowns form our variable vector h. Rearranging the equations into the linear system form <b>A·h = b</b> gives:
+    </p>
+    <pre>
+        [x, y, 1, 0, 0, 0, -x*x', -y*x'] * h = x'
+        [0, 0, 0, x, y, 1, -x*y', -y*y'] * h = y'
+    </pre>
+    
+    <p>
+        Each point correspondence adds two rows to the A matrix and two values to b.
+        Where A is the left-most matrix, b is each x' y' for each point correspondence, and h is h11...h33
+        When we stack all correspondences, we get an overdetermined system, since there are more rows than columns in A:
+    </p>
+    <pre>
+        A·h = b
+    </pre>
+    <p>
+        and we solve for h using least squares:
+    </p>
+    <pre>
+        h = (AᵀA)⁻¹ Aᵀ b
+    </pre>
+    <p>
+        Finally, I reshape h into a 3×3 matrix and append a 1 in the bottom-right corner to form the full H.
+    </p>
+    
+    <p>
+        A homography has 8 degrees of freedom because although there are 9 values in H, it is only defined up to scale — multiplying all entries by a constant doesn’t change the mapping (since we divide by w'). Fixing one value (usually h33 = 1) leaves 8 independent parameters.
+    </p>
+    
+    <p>
+        I used more than four correspondences (around 10–15) to improve stability and reduce sensitivity to noise. Even small pixel errors can cause large differences in H, so having extra points makes the least-squares fit more robust.
+        In practice, feature detection methods can automate this, and do so with far less points if each one is pixel perfect.
+        but I manually selected points and visualized them on both images to ensure correct order and alignment before computing H.
+    </p>
+    
+    <p>
+        Below are the visualized correspondences for both image sets and the recovered homography matrices:
+    </p>
+    
+    <h4>First Set</h4>
+    <pre>
+    H (im1 → im2) =
+    [[ 1.83437462e+00  5.57856823e-02 -1.38054126e+03]
+     [ 2.62756831e-01  1.58344337e+00 -3.86642908e+02]
+     [ 4.10616761e-04  1.96645290e-05  1.00000000e+00]]
+    
+    H (im3 → im2) =
+    [[ 4.43891537e-01 -4.08861421e-03  9.38074333e+02]
+     [-2.12246435e-01  8.32100326e-01  1.20356408e+02]
+     [-2.84353729e-04  5.28596268e-07  1.00000000e+00]]
+    </pre>
+    
+    <h4>Second Set</h4>
+    <pre>
+    H (im1 → im2) =
+    [[ 1.65117333e+00  9.41184601e-05 -3.97672737e+02]
+     [ 2.49495478e-01  1.40777896e+00 -9.50721000e+01]
+     [ 9.69177470e-04 -6.28040078e-05  1.00000000e+00]]
+    
+    H (im3 → im2) =
+    [[ 5.52680039e-01  4.72553054e-02  2.48030983e+02]
+     [-1.53263914e-01  8.87134504e-01  1.59745918e+01]
+     [-6.98874592e-04  1.25769836e-04  1.00000000e+00]]
+    </pre>
+
      <div class="image-wrapper">
-        <div class="image-caption">Cathedral</div>
-        <img src="mediathree/im1(1-2)r.png" alt="Cathedral">
+        <div class="image-caption">Ryan's Room Image 1 Correspondences (Image 1 --> Image 2)</div>
+        <img src="mediathree/im1(1-2)r.png" alt="Ryan's Room">
     </div>
     <div class="image-wrapper">
-        <div class="image-caption">Cathedral</div>
-        <img src="mediathree/im2(1-2)r.png" alt="Cathedral">
+        <div class="image-caption">Ryan's Room Image 2 Correspondences (Image 1 --> Image 2)</div>
+        <img src="mediathree/im2(1-2)r.png" alt="Ryan's Room">
      </div>
     <div class="image-wrapper">
-        <div class="image-caption">Cathedral</div>
-        <img src="mediathree/im2(3-2)r.png" alt="Cathedral">
+        <div class="image-caption">Ryan's Room Image 2 Correspondences (Image 3 --> Image 2)</div>
+        <img src="mediathree/im2(3-2)r.png" alt="Ryan's Room">
     </div>
     <div class="image-wrapper">
-        <div class="image-caption">Cathedral</div>
-        <img src="mediathree/im3(3-2)r.png" alt="Cathedral">
+        <div class="image-caption">Ryan's Room Image 3 Correspondences (Image 3 --> Image 2)</div>
+        <img src="mediathree/im3(3-2)r.png" alt="Ryan's Room">
     </div>
     <p>
-       Here are my correspondences for the second set of images and here in written form is the system of equations (Ab) and the recovered homography matrix
-      (H) for im1 to im2 and im3 to im2
-        This is H: [[ 1.65117333e+00  9.41184601e-05 -3.97672737e+02]
-         [ 2.49495478e-01  1.40777896e+00 -9.50721000e+01]
-         [ 9.69177470e-04 -6.28040078e-05  1.00000000e+00]]
-        started
-        This is H: [[ 5.52680039e-01  4.72553054e-02  2.48030983e+02]
-         [-1.53263914e-01  8.87134504e-01  1.59745918e+01]
-         [-6.98874592e-04  1.25769836e-04  1.00000000e+00]]
+       Here are my correspondences for the second set of images
     </p>
       <div class="image-wrapper">
-        <div class="image-caption">Cathedral</div>
-        <img src="mediathree/im1(1-2)e.png" alt="Cathedral">
+        <div class="image-caption">Ethan's Room Image 1 Correspondences (Image 1 --> Image 2)</div>
+        <img src="mediathree/im1(1-2)e.png" alt="Ethan's Room">
     </div>
     <div class="image-wrapper">
-        <div class="image-caption">Cathedral</div>
-        <img src="mediathree/im2(1-2)e.png" alt="Cathedral">
+        <div class="image-caption">Ethan's Room Image 2 Correspondences (Image 1 --> Image 2)</div>
+        <img src="mediathree/im2(1-2)e.png" alt="Ethan's Room">
      </div>
     <div class="image-wrapper">
-        <div class="image-caption">Cathedral</div>
-        <img src="mediathree/im2(3-2)e.png" alt="Cathedral">
+        <div class="image-caption">Ethan's Room Image 2 Correspondences (Image 3 --> Image 2)</div>
+        <img src="mediathree/im2(3-2)e.png" alt="Ethan's Room">
     </div>
     <div class="image-wrapper">
-        <div class="image-caption">Cathedral</div>
-        <img src="mediathree/im3(3-2)e.png" alt="Cathedral">
+        <div class="image-caption">Ethan's Room Image 3 Correspondences (Image 3 --> Image 2)</div>
+        <img src="mediathree/im3(3-2)e.png" alt="Ethan's Room">
     </div>
     <p>
-       Here are my correspondences for the third set of images and here in written form is the system of equations (Ab) and the recovered homography matrix
-      (H) for im1 to im2 and im3 to im2
+       Here are my correspondences for the third set of images
     </p>
       <div class="image-wrapper">
-        <div class="image-caption">Cathedral</div>
+        <div class="image-caption">Mishka's Room Image 1 Correspondences (Image 1 --> Image 2)</div>
         <img src="mediathree/im1(1-2)m.png" alt="Cathedral">
     </div>
     <div class="image-wrapper">
-        <div class="image-caption">Cathedral</div>
+        <div class="image-caption">Mishka's Room Image 2 Correspondences (Image 1 --> Image 2)</div>
         <img src="mediathree/im2(1-2)m.png" alt="Cathedral">
      </div>
     <div class="image-wrapper">
-        <div class="image-caption">Cathedral</div>
+        <div class="image-caption">Mishka's Room Image 2 Correspondences (Image 3 --> Image 2)</div>
         <img src="mediathree/im2(3-2)m.png" alt="Cathedral">
     </div>
     <div class="image-wrapper">
-        <div class="image-caption">Cathedral</div>
+        <div class="image-caption">Mishka's Room Image 3 Correspondences (Image 3 --> Image 2)</div>
         <img src="mediathree/im3(3-2)m.png" alt="Cathedral">
     </div>
 
@@ -246,67 +334,44 @@
         more jagged edges by copying the nearest pixel value, but it runs faster. The quality of bilinear is higher and worth the extra time since
         bilinear interpolation is still fast and high resolution images with smoothed pixels is helpful in making mosaics align properly. 
     </p>
-    <p> 
-        source image #1
-    </p>
      <div class="image-wrapper">
-        <div class="image-caption">Cathedral</div>
+        <div class="image-caption">The Flagellation of Christ source image</div>
         <img src="mediathree/jesussource.png" alt="Cathedral">
     </div>
-    <p>
-       Here is the code for bilinear and how it warps an example image RECTIFICATION #1 (im not doing this for all)
-    </p>
+
     <div class="image-wrapper">
-        <div class="image-caption">Cathedral</div>
+        <div class="image-caption">The Flagellation of Christ Bilinear Interpolation</div>
         <img src="mediathree/bj.png" alt="Cathedral">
     </div>
-    <p>
-       Here is the code for nearest neighbor and how it warps an example image RECTIFICATION #1 (im not doing this for all)
-    </p>
+
     <div class="image-wrapper">
-        <div class="image-caption">Cathedral</div>
+        <div class="image-caption">The Flagellation of Christ NN Interpolation</div>
         <img src="mediathree/nnj.png" alt="Cathedral">
     </div>
-    <p> 
-        source image #2
-    </p>
      <div class="image-wrapper">
-        <div class="image-caption">Cathedral</div>
+        <div class="image-caption">Last Supper source image</div>
         <img src="mediathree/lastsuppersource.jpg" alt="Cathedral">
     </div>
-    <p>
-       Here is the code for bilinear and how it warps an example image RECTIFICATION #2 (im not doing this for all)
-    </p>
+  
      <div class="image-wrapper">
-        <div class="image-caption">Cathedral</div>
+        <div class="image-caption">Last Supper Bilinear Interpolation</div>
         <img src="mediathree/bls.png" alt="Cathedral">
     </div>
-    <p>
-       Here is the code for nearest neighbor and how it warps an example image RECTIFICATION #2 (im not doing this for all)
-    </p>
+
     <div class="image-wrapper">
-        <div class="image-caption">Cathedral</div>
+        <div class="image-caption">Last Supper NN Interpolation</div>
         <img src="mediathree/nnls.png" alt="Cathedral">
     </div>
-    <p> 
-        source image #3
-    </p>
      <div class="image-wrapper">
-        <div class="image-caption">Cathedral</div>
+        <div class="image-caption">Chemical Brothers Poster source image</div>
         <img src="mediathree/cbsource.png" alt="Cathedral">
     </div>
-    <p>
-       Here is the code for bilinear and how it warps an example image RECTIFICATION #3 (im not doing this for all)
-    </p>
      <div class="image-wrapper">
-        <div class="image-caption">Cathedral</div>
+        <div class="image-caption">Chemical Brothers Poster Bilinear Interpolation</div>
         <img src="mediathree/cbb.png" alt="Cathedral">
     </div>
-    <p>
-       Here is the code for nearest neighbor and how it warps an example image RECTIFICATION #3 (im not doing this for all)
-    </p>
     <div class="image-wrapper">
-        <div class="image-caption">Cathedral</div>
+        <div class="image-caption">Chemical Brothers Poster NN Interpolation</div>
         <img src="mediathree/cbnn.png" alt="Cathedral">
     </div>
         
@@ -339,6 +404,7 @@
     <br>
 </body>
 </html>
+
 
 
 
