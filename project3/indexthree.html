@@ -324,193 +324,165 @@ Bilinear: the pixel value is computed from the 4 closest pixel centers (top left
         <div class="image-caption">Ethan's Room Mosaic</div> <img src="mediathree/mosaic e.png" alt="Cathedral"> </div> <div class="image-wrapper"> <div class="image-caption">Mishka's Room Mosaic</div> <img src="mediathree/mosaic m.png" alt="Cathedral"> </div> </div> <br> 
 <h1>Automatic Image Stitching and Panorama Creation</h1>
     
-    <!-- Part B.1: Harris Corner Detection -->
+    <!-- PART B -->
     <div class="section">
-        <h2>B.1: Harris Corner Detection</h2>
+        <h2>B1: Harris Corner Detection and Adaptive Non-Maximal Suppression</h2>
         
         <div class="explanation">
-            <strong>Your Explanation:</strong> 
-            [Explain your implementation of Harris corner detection here. Describe how the Harris detector 
-            finds points where image intensity changes significantly in all directions, making them stable 
-            keypoints for matching. Mention the parameters you used and any observations about the 
-            corner detection quality.]
-        </div>
-        
-        <h3>Harris Corners (All Detected)</h3>
-        <div class="image-container">
-            <img src="harris_corners_all.png" alt="All Harris corners detected">
-            <p class="image-caption">Figure 1: All Harris corners detected on the image (before ANMS)</p>
+            <strong>Harris Corners Explanation:</strong> 
+            The harris detector calculates the gradients of all the points of an image. A gradient in this case can be horizontal or vertical and measures
+            the rate of change going from one pixel to the next in a neighborhood of pixels. If there is a drastic shift when applying the horizontal gradient
+            then there is a a boundary being crossed across a vertical line. Same goes for the vertical gradient. An edge will have either a horizontal or vertical line
+            so one of its gradients will be large. A flat area will have no noticeable large gradients. Finally a corner will have a horizontal and vertical edge meeting
+            meaning both gradients are large. We can create a Harris matrix that stores these eigenvalues (x and y gradient respectivelly) and we can measure how large they each are by
+            dividing the determinant of the matrix by its trace. If its a corner then the determinant will be larger than the trace and be a large number, whereas
+            if its a flat region or an edge the ratio will be small producing a small number. We then just select all numbers over a certain threshold.
         </div>
         
         <h3>Adaptive Non-Maximal Suppression (ANMS)</h3>
         <div class="explanation">
-            <strong>Your Explanation:</strong> 
-            [Explain ANMS here. Describe how it selects well-distributed corners by computing suppression 
-            radii - the distance each corner needs to travel to find a significantly stronger corner. 
-            Explain why this gives better spatial distribution than just taking the top N strongest corners.]
+            <strong>ANMS Explanation:</strong> 
+            Harris Corner selection selected all corners. The naive way too reduce how many corners there are (usually thousands in an image) without losing information
+            is to take the top_n maximum points. However this can concentrate towards really strong areas of the image and ignore corners that are locally stronger than
+            surrounding points while being weak corners OVERALL in the image. ANMS basically says: how far away are you from a corner thats stronger than you by x amount. Once
+            it find that neighboring corner it keeps track of the distance and then chooses the ones with the furthest distances. This way it both favors strong points
+            that are the strongest in a large area while also not favoring strong points that are surrounded by tons of storng points (although they will still be counted, just
+            less)
         </div>
         
         <div class="side-by-side">
             <div class="image-container">
-                <img src="harris_corners_all.png" alt="All Harris corners">
-                <p class="image-caption">Before ANMS: ~5000 corners (clustered)</p>
+                <img src="mediathree/corners r.png">
+                <p class="image-caption">Harris and ANMS for Ryan Room</p>
             </div>
             <div class="image-container">
-                <img src="harris_corners_anms.png" alt="ANMS selected corners">
-                <p class="image-caption">After ANMS: 400 well-distributed corners</p>
+                <img src="mediathree/corners e.png">
+                <p class="image-caption">Harris and ANMS for Ethan Room</p>
+            </div>
+            <div class="image-container">
+                <img src="mediathree/corners m.png">
+                <p class="image-caption">Harris and ANMS for Mishka Room</p>
             </div>
         </div>
     </div>
-    
-    <!-- Part B.2: Feature Descriptor Extraction -->
     <div class="section">
-        <h2>B.2: Feature Descriptor Extraction</h2>
+        <h2>B2: Feature Descriptor Extraction</h2>
         
         <div class="explanation">
-            <strong>Your Explanation:</strong> 
-            [Explain feature descriptor extraction. Describe how you sample an 8×8 grid from a 40×40 window 
-            around each corner (every 5th pixel) to create a 64-dimensional descriptor. Explain the importance 
-            of bias/gain normalization (zero mean, unit variance) to make descriptors invariant to lighting 
-            changes. Mention why sampling at lower frequency makes descriptors more robust to small position errors.]
+            <strong>Feature Descriptor Explination:</strong> 
+            A feature descriptor is a way of storing what a point on an image looks like so that the computer can match other points in other images
+            that share that feature and compare a list of features from both images until it matches them all up (excluding those that only appear in one
+            image or the other, and not both) we sample an 8x8 grid around each corner for every 5th pixel) which displays that pixel in grayscale and normalizes
+            it to avoid injecting any differences like contrast or brightness into the descriptor that dont actually describe the underlying object. We want the computer
+            to avoid changing the images for different exposures so its invariant to lighting changes. Finally, we
+            "unroll" the 8x8 into a 64 dimension descriptor that we can compare with other descriptors. 
         </div>
         
         <h3>Sample Feature Descriptors</h3>
         <div class="image-container">
-            <img src="feature_descriptors.png" alt="Sample feature descriptors visualization">
-            <p class="image-caption">Figure 2: Visualization of 16 sample feature descriptors showing 
-            the normalized 8×8 intensity patterns around detected corners</p>
+            <img src="mediathree/features e.png">
+            <p class="image-caption">16 features extracted from Ethan's room</p>
         </div>
     </div>
     
-    <!-- Part B.3: Feature Matching -->
     <div class="section">
-        <h2>B.3: Feature Matching</h2>
+        <h2>B3: Feature Matching</h2>
         
         <div class="explanation">
-            <strong>Your Explanation:</strong> 
-            [Explain feature matching using Lowe's ratio test. Describe how you compute the ratio of 
-            distances to the first and second nearest neighbors, and only accept matches where this ratio 
-            is below a threshold (typically 0.6-0.7). Explain that this rejects ambiguous matches where 
-            multiple features look similar. If you used mutual matching, explain how requiring bidirectional 
-            consistency further improves match quality.]
+            <strong>How Feature Matching works:</strong> 
+            We match features using Lowe's ration test. We find the ratio between the first nearest neighbor (in euclidean distance
+            the feature that has the lowest distance or has the most similar descriptor) and the second nearest neighbor.
+            The idea is that we only want to pick the first descriptor/ nearest neighbor as our match if its really far from other
+            matches. Otherwise it cant be that good of a match if everything else also looks the same. Additionally I checked
+            that both features choose each other in my feature matching algorithm for extra assurance.
         </div>
         
-        <h3>Feature Matches Between Image Pairs</h3>
+        <h3>Feature Matches Between Images</h3>
         
         <div class="image-container">
-            <img src="feature_matches_pair1.png" alt="Feature matches between images 1 and 2">
-            <p class="image-caption">Figure 3a: Feature matches between Image 1 and Image 2 
-            (showing ~50 of X total matches)</p>
+            <img src="mediathree/ransac r.png">
+            <p class="image-caption">lines showing which features in im1 point to features in im2 (Ryan's Room)</p>
         </div>
         
         <div class="image-container">
-            <img src="feature_matches_pair2.png" alt="Feature matches between images 2 and 3">
-            <p class="image-caption">Figure 3b: Feature matches between Image 2 and Image 3 
-            (showing ~50 of Y total matches)</p>
+            <img src="mediathree/ransac e.png">
+            <p class="image-caption">Same for Ethan's room</p>
+        </div>
+
+        <div class="image-container">
+            <img src="mediathree/ransac m.png">
+            <p class="image-caption">Same for Mishka's room</p>
         </div>
     </div>
     
-    <!-- Part B.4: RANSAC for Robust Homography -->
     <div class="section">
-        <h2>B.4: RANSAC for Robust Homography Estimation</h2>
+        <h2>B4: RANSAC</h2>
         
         <div class="explanation">
-            <strong>Your Explanation:</strong> 
-            [Explain RANSAC. Describe how it robustly estimates the homography despite outlier matches 
-            by iteratively: (1) sampling 4 random point pairs, (2) computing a candidate homography, 
-            (3) counting inliers (points with reprojection error below threshold), and (4) keeping the 
-            homography with most inliers. Explain why this works even with 50%+ outliers. Mention your 
-            parameters: number of iterations, inlier threshold (e.g., 5-6 pixels), and typical inlier 
-            ratio achieved.]
+            <strong>Ransac Explained:</strong> 
+            Ransac has 4 steps: (1) choose 4 random point pairs between my chosen matches. (2) compute a homography between those points
+            to the points in the other image (3) count inliers which is the number of points that are below a certain threshold when we take the difference between Hp and p' (i.e. between
+            Homography applied to first set of points and what the second set of points actually is). (4) We then keep the homography which has the most inliers
+            and therefore the least outliers. Basically of all the features choose the batch that best represents the ideal homography for the image.
         </div>
         
-        <h3>RANSAC Inliers vs Outliers</h3>
         <div class="image-container">
-            <img src="ransac_inliers.png" alt="RANSAC results showing inliers in green and outliers in red">
-            <p class="image-caption">Figure 4: RANSAC results - inliers (green) vs outliers (red). 
-            Achieved XX inliers out of YY total matches (ZZ% inlier ratio)</p>
+            <img src="mediathree/ransac r.png">
+            <p class="image-caption">same as above images since they showed both feature matching and ransac selection</p>
         </div>
         
-        <h3>Comparison: Manual vs Automatic Stitching</h3>
+        <div class="image-container">
+            <img src="mediathree/ransac e.png">
+            <p class="image-caption">same as above images since they showed both feature matching and ransac selection</p>
+        </div>
+
+        <div class="image-container">
+            <img src="mediathree/ransac m.png">
+            <p class="image-caption">same as above images since they showed both feature matching and ransac selection</p>
+        </div>
+    </div>
+        
+        <h3>Comparison to the Manual stitching above: Automatic stitching</h3>
         <div class="explanation">
-            <strong>Your Explanation:</strong> 
-            [Compare manual vs automatic stitching results. Discuss the quality, alignment accuracy, 
-            and any differences you observe. Mention advantages of automatic stitching (speed, 
-            reproducibility) and any challenges faced.]
+            <strong>Issues with alignment:</strong> 
+            Automatic while not faster is more impressive in that it chooses better points and doesnt require manual input. The images
+            also look better, both because I improved my masking in the mosaic but also because they really reduce any shakiness when i manually 
+            chose points, since they filter out errors in a certain pixel range. One Issue I noticed is that while 3 image stiching for manual
+            points didnt take too long to run. Automatic stching did because of the types of images I took. Scaling down by .8 usually fixed the issues
+            but for images with lots of posters (like in my room -- ryan's) the amount of edges detected by harris was so large it nearly crashed my computer unless
+            I scaled it down by .7 and made sure not every single image was full of posters.
         </div>
         
-        <!-- Mosaic 1 -->
         <h4>Mosaic 1</h4>
         <div class="side-by-side">
             <div class="image-container">
-                <img src="mosaic1_manual.png" alt="Mosaic 1 - Manual stitching">
-                <p class="image-caption">Manual stitching (hand-selected correspondences)</p>
+                <img src="mediathree/mosaic r2 manual.png">
+                <p class="image-caption">Manual stitching</p>
             </div>
             <div class="image-container">
-                <img src="mosaic1_automatic.png" alt="Mosaic 1 - Automatic stitching">
-                <p class="image-caption">Automatic stitching (RANSAC-based)</p>
+                <img src="mediathree/mosaic r2 auto.png">
+                <p class="image-caption">Automatic stitching Ryan's Room</p>
             </div>
         </div>
         
-        <!-- Mosaic 2 -->
         <h4>Mosaic 2</h4>
-        <div class="side-by-side">
             <div class="image-container">
-                <img src="mosaic2_manual.png" alt="Mosaic 2 - Manual stitching">
-                <p class="image-caption">Manual stitching (hand-selected correspondences)</p>
-            </div>
-            <div class="image-container">
-                <img src="mosaic2_automatic.png" alt="Mosaic 2 - Automatic stitching">
-                <p class="image-caption">Automatic stitching (RANSAC-based)</p>
+                <img src="mediathree/mosaic e auto.png">
+                <p class="image-caption">Automatic stitching Ethan's Room</p>
             </div>
         </div>
         
-        <!-- Mosaic 3 -->
         <h4>Mosaic 3</h4>
-        <div class="side-by-side">
-            <div class="image-container">
-                <img src="mosaic3_manual.png" alt="Mosaic 3 - Manual stitching">
-                <p class="image-caption">Manual stitching (hand-selected correspondences)</p>
-            </div>
-            <div class="image-container">
-                <img src="mosaic3_automatic.png" alt="Mosaic 3 - Automatic stitching">
-                <p class="image-caption">Automatic stitching (RANSAC-based)</p>
-            </div>
-        </div>
-        
-        <h3>Additional Automatic Panoramas</h3>
-        <div class="explanation">
-            <strong>Your Explanation:</strong> 
-            [Describe any additional panoramas you created. Discuss what scenes worked well and any 
-            challenges with particular image sets (e.g., low texture, repetitive patterns, large 
-            viewpoint changes).]
-        </div>
-        
-        <div class="mosaic-grid">
-            <div class="image-container">
-                <img src="panorama_extra1.png" alt="Additional panorama 1">
-                <p class="image-caption">Additional Panorama 1</p>
-            </div>
-            <div class="image-container">
-                <img src="panorama_extra2.png" alt="Additional panorama 2">
-                <p class="image-caption">Additional Panorama 2</p>
+          <div class="image-container">
+                <img src="mediathree/mosaic m auto.png">
+                <p class="image-caption">Automatic stitching Mishka's Room</p>
             </div>
         </div>
     </div>
     
-    <!-- Conclusion -->
-    <div class="section">
-        <h2>Conclusions and Learnings</h2>
-        <div class="explanation">
-            <strong>Your Reflection:</strong> 
-            [Summarize what you learned from this project. Discuss the coolest part, biggest challenges, 
-            and insights about how automatic feature detection and matching works. Reflect on the 
-            strengths and limitations of the multi-resolution spline blending approach for creating 
-            seamless panoramas.]
-        </div>
-    </div>
 </body>
 </html>
+
 
 
 
