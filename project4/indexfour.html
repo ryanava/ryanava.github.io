@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeRF Project Deliverables</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 50px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 50px;
+        }
+        
+        .section {
+            margin-bottom: 60px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section h2::before {
+            content: "📊";
+            margin-right: 15px;
+            font-size: 1.2em;
+        }
+        
+        .section-description {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        
+        .image-grid {
+            display: grid;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .image-grid.two-col {
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        }
+        
+        .image-grid.three-col {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+        
+        .image-grid.single {
+            grid-template-columns: 1fr;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+        
+        .image-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .image-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .image-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+            margin-bottom: 15px;
+        }
+        
+        .image-label {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 1.1em;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        
+        .image-description {
+            color: #666;
+            font-size: 0.95em;
+            text-align: center;
+            line-height: 1.4;
+        }
+        
+        .part-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: inline-block;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .image-grid.two-col,
+            .image-grid.three-col {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Neural Radiance Fields (NeRF)</h1>
+        <p class="subtitle">Computer Vision Project Deliverables</p>
+        
+        <!-- Part 0 -->
+        <div class="section">
+            <div class="part-header">Part 0: Camera Calibration and 3D Scanning</div>
+            <p class="section-description">
+                Visualization of camera frustums in 3D space showing the camera poses and viewing directions for the multi-view dataset.
+            </p>
+            <div class="image-grid three-col">
+                <div class="image-item">
+                    <img src="mediafour/lego frustum visualized.png" alt="Lego Frustum Visualization">
+                    <div class="image-label">Lego Dataset - Camera Frustums</div>
+                    <div class="image-description">3D visualization of camera positions and orientations</div>
+                </div>
+                <div class="image-item">
+                    <img src="mediafour/my visualized frustrums.png" alt="Custom Frustums">
+                    <div class="image-label">Custom Dataset - Camera Frustums</div>
+                    <div class="image-description">Camera setup for custom object capture</div>
+                </div>
+                <div class="image-item">
+                    <img src="mediafour/lego frustrum with rays.png" alt="Frustum with Rays">
+                    <div class="image-label">Ray Visualization</div>
+                    <div class="image-description">Camera frustums with sampled rays shown</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Part 1 -->
+        <div class="section">
+            <div class="part-header">Part 1: Fit a Neural Field to a 2D Image</div>
+            <p class="section-description">
+                Training a neural network to represent a 2D image as a continuous function, mapping pixel coordinates to RGB colors using positional encoding.
+            </p>
+            
+            <div class="image-grid single">
+                <div class="image-item">
+                    <img src="mediafour/model parameters.png" alt="Model Architecture">
+                    <div class="image-label">Model Architecture</div>
+                    <div class="image-description">
+                        Network configuration: Layer count, hidden dimensions, learning rate, and positional encoding settings
+                    </div>
+                </div>
+            </div>
+            
+            <h3 style="color: #667eea; margin: 30px 0 20px 0; font-size: 1.4em;">Training Results</h3>
+            <div class="image-grid two-col">
+                <div class="image-item">
+                    <img src="mediafour/test image psnr.png" alt="Test Image PSNR">
+                    <div class="image-label">PSNR Curve - Test Image</div>
+                    <div class="image-description">Peak Signal-to-Noise Ratio over training iterations</div>
+                </div>
+                <div class="image-item">
+                    <img src="mediafour/deliverable_3_psnr_curve.png" alt="Custom Image PSNR">
+                    <div class="image-label">PSNR Curve - Custom Image</div>
+                    <div class="image-description">Training metrics on custom test image</div>
+                </div>
+            </div>
+            
+            <h3 style="color: #667eea; margin: 30px 0 20px 0; font-size: 1.4em;">Training Progression</h3>
+            <div class="image-grid two-col">
+                <div class="image-item">
+                    <img src="mediafour/test image grid.png" alt="Test Image Progression">
+                    <div class="image-label">Provided Test Image Progression</div>
+                    <div class="image-description">Neural field fitting across training iterations</div>
+                </div>
+                <div class="image-item">
+                    <img src="mediafour/deliverable_2_hyperparameter_grid.png" alt="Hyperparameter Grid">
+                    <div class="image-label">Hyperparameter Comparison Grid</div>
+                    <div class="image-description">Results for different positional encoding frequencies and network widths</div>
+                </div>
+            </div>
+            
+            <div class="image-grid single">
+                <div class="image-item">
+                    <img src="mediafour/deliverable_1_provided_p...sion.png" alt="Provided Image Results">
+                    <div class="image-label">Training Progression - Multiple Configurations</div>
+                    <div class="image-description">Comparison of training results across different hyperparameter settings</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Part 2 -->
+        <div class="section">
+            <div class="part-header">Part 2: Fit a Neural Radiance Field from Multi-view Images</div>
+            <p class="section-description">
+                Training a 3D neural radiance field that learns volumetric scene representation from multiple 2D views, enabling novel view synthesis.
+            </p>
+            
+            <h3 style="color: #667eea; margin: 20px 0; font-size: 1.4em;">Training Progress</h3>
+            <div class="image-grid single">
+                <div class="image-item">
+                    <img src="mediafour/test provided progression.png" alt="Training Progression">
+                    <div class="image-label">Rendered Images Across Training Iterations</div>
+                    <div class="image-description">Evolution of scene reconstruction quality during NeRF training</div>
+                </div>
+            </div>
+        </div>
+        
+        <footer style="text-align: center; margin-top: 50px; padding-top: 30px; border-top: 2px solid #e0e0e0; color: #666;">
+            <p style="font-size: 0.95em;">Neural Radiance Fields Implementation | Computer Vision Project</p>
+            <p style="font-size: 0.85em; margin-top: 10px; opacity: 0.7;">Visualizing 3D scene reconstruction through learned volumetric representations</p>
+        </footer>
+    </div>
+</body>
+</html>
