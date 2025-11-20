@@ -7,91 +7,92 @@
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
-    margin: 20px;
+    margin: 0;
+    padding: 20px;
     background-color: #f9f9f9;
     color: #333;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-h1, h2, h3 {
+h1, h2, h3, h4 {
     color: #2c3e50;
+    margin-top: 30px;
 }
 
-p {
-    max-width: 800px;
+h1 {
+    font-size: 2.5em;
+    border-bottom: 3px solid #2c3e50;
+    padding-bottom: 10px;
+}
+
+h2 {
+    font-size: 2em;
+    border-bottom: 2px solid #7f8c8d;
+    padding-bottom: 8px;
+}
+
+p, .explanation {
+    max-width: 100%;
+    margin: 15px 0;
 }
 
 img {
     max-width: 100%;
-    max-height: 70vh; /* fit screen height */
     height: auto;
     display: block;
-    margin: auto;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+}
+
+.image-wrapper, .image-container {
+    margin: 30px 0;
+    text-align: center;
 }
 
 .image-caption {
-    margin-top: 10px;
-    font-size: 1.5em;
+    margin: 10px 0;
+    font-size: 1.2em;
     color: #111;
     font-weight: bold;
     text-align: center;
 }
 
-.row {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 30px;
+pre {
+    background-color: #f4f4f4;
+    padding: 15px;
+    border-left: 4px solid #2c3e50;
+    overflow-x: auto;
+    margin: 20px 0;
 }
 
-.row div {
-    text-align: center;
+code {
+    background-color: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
 }
 
-.row img {
-    max-width: 300px;
-    max-height: 70vh;
-    border: 1px solid #ccc;
+.section {
+    margin: 50px 0;
 }
 
-#example-images,
-#chosen-images {
-    font-size: 3em;
-    text-align: center;
-    text-decoration: underline;
-    color: #111;
+.explanation {
+    background-color: #fff;
+    padding: 15px;
+    border-left: 4px solid #3498db;
+    margin: 20px 0;
 }
 
-#note {
-    text-align: center;
-    color: #111;
-    font-size: 1em;
-}
-
-.intro-text {
-    flex: 2;
-    text-align: left;
-}
-
-.intro-container {
-    display: flex;
-    align-items: flex-start;
-    gap: 20px;
-}
-
-.intro-image {
-    flex: 1;
-}
-
-.intro-image img {
-    max-width: 100%;
-    max-height: 90vh;
-    height: auto;
+strong {
+    color: #2c3e50;
 }
 </style>
 </head>
 <body>
-<div class="intro-container">
-<div class="intro-text">
+
 <h1>Project 3a: Image Warping and Mosaicing</h1>
+
 <h2>Overview</h2>
 <p>
     The goal of this project was to explore image warping and how to apply it to create an image mosaic. 
@@ -100,19 +101,23 @@ img {
     seams of these images can be blended using masks and laplacian stacks to produce a seamless stich of all the image, producing
     a panoramic effect.
 </p>
+
 <h2>Shooting the Pictures: A Story of Three Roommates</h2>
 <p>
 I chose these images with projective transformations between them (a fixed center of projection with the camera rotated).
 Each set of images is a different room in my house for each of my roommates (including me)
 </p>
+
 <div class="image-wrapper">
 <div class="image-caption">Ryan's Room first angle</div>
 <img src="mediathree/r1source.jpeg" alt="ryans room">
 </div>
+
 <div class="image-wrapper">
 <div class="image-caption">Ryan's Room second angle</div>
 <img src="mediathree/r2source.jpeg" alt="ryans room">
 </div>
+
 <div class="image-wrapper">
 <div class="image-caption">Ryan's Room third angle</div>
 <img src="mediathree/r3source.jpeg" alt="ryans room">
@@ -122,10 +127,12 @@ Each set of images is a different room in my house for each of my roommates (inc
 <div class="image-caption">Ethan's Room first angle</div>
 <img src="mediathree/e1source.png" alt="ethans room">
 </div>
+
 <div class="image-wrapper">
 <div class="image-caption">Ethan's Room second angle</div>
 <img src="mediathree/e2source.png" alt="ethans room">
 </div>
+
 <div class="image-wrapper">
 <div class="image-caption">Ethan's Room third angle</div>
 <img src="mediathree/e3source.png" alt="ethans room">
@@ -135,10 +142,12 @@ Each set of images is a different room in my house for each of my roommates (inc
 <div class="image-caption">Mishka's Room first angle</div>
 <img src="mediathree/m1source.png" alt="mishkas room">
 </div>
+
 <div class="image-wrapper">
 <div class="image-caption">Mishka's Room second angle</div>
 <img src="mediathree/m2source.png" alt="mishkas room">
 </div>
+
 <div class="image-wrapper">
 <div class="image-caption">Mishka's Room third angle</div>
 <img src="mediathree/m3source.png" alt="mishkas room">
@@ -154,28 +163,20 @@ Each set of images is a different room in my house for each of my roommates (inc
 [y'] = [h21 h22 h23] * [y]
 [w']   [h31 h32 h33]   [1]</pre>
 <p>To get back to regular (non-homogenous) image coordinates, we divide by w':</p>
-<pre>
-x' = (h11*x + h12*y + h13) / (h31*x + h32*y + h33)
-y' = (h21*x + h22*y + h23) / (h31*x + h32*y + h33)
-</pre>
+<pre>x' = (h11*x + h12*y + h13) / (h31*x + h32*y + h33)
+y' = (h21*x + h22*y + h23) / (h31*x + h32*y + h33)</pre>
 
 <p>These two equations are nonlinear because of the denominator. To solve for the elements of H, we need the equation to be linear, so we rearrange them:</p>
-<pre>
-x'*(h31*x + h32*y + h33) = h11*x + h12*y + h13
-y'*(h31*x + h32*y + h33) = h21*x + h22*y + h23
-</pre>
+<pre>x'*(h31*x + h32*y + h33) = h11*x + h12*y + h13
+y'*(h31*x + h32*y + h33) = h21*x + h22*y + h23</pre>
 
 <p>Moving all terms to one side and grouping coefficients gives:</p>
-<pre>
-0 = h11*x + h12*y + h13 - h31*x*x' - h32*y*x' - h33*x'
-0 = h21*x + h22*y + h23 - h31*x*y' - h32*y*y' - h33*y'
-</pre>
+<pre>0 = h11*x + h12*y + h13 - h31*x*x' - h32*y*x' - h33*x'
+0 = h21*x + h22*y + h23 - h31*x*y' - h32*y*y' - h33*y'</pre>
 
 <p>Since h33 is a scalar, we can fix it to 1. The remaining 8 unknowns form our variable vector h. Rearranging the equations into the linear system form <b>A·h = b</b> gives:</p>
-<pre>
-[x, y, 1, 0, 0, 0, -x*x', -y*x'] * h = x'
-[0, 0, 0, x, y, 1, -x*y', -y*y'] * h = y'
-</pre>
+<pre>[x, y, 1, 0, 0, 0, -x*x', -y*x'] * h = x'
+[0, 0, 0, x, y, 1, -x*y', -y*y'] * h = y'</pre>
 
 <p>Each point correspondence adds two rows to the A matrix and two values to b. Where A is the left-most matrix, b is each x' y' for each point correspondence, and h is h11...h33. When we stack all correspondences, we get an overdetermined system, since there are more rows than columns in A:</p>
 <pre>A·h = b</pre>
@@ -183,45 +184,45 @@ y'*(h31*x + h32*y + h33) = h21*x + h22*y + h23
 <pre>h = (AᵀA)⁻¹ Aᵀ b</pre>
 <p>Finally, I reshape h into a 3×3 matrix and append a 1 in the bottom-right corner to form the full H.</p>
 
-<p>A homography has 8 degrees of freedom because although there are 9 values in H, it is only defined up to scale — multiplying all entries by a constant doesn’t change the mapping (since we divide by w'). Fixing one value (usually h33 = 1) leaves 8 independent parameters.</p>
+<p>A homography has 8 degrees of freedom because although there are 9 values in H, it is only defined up to scale — multiplying all entries by a constant doesn't change the mapping (since we divide by w'). Fixing one value (usually h33 = 1) leaves 8 independent parameters.</p>
 
 <p>I used more than four correspondences (around 10–15) to improve stability and reduce sensitivity to noise. Even small pixel errors can cause large differences in H, so having extra points makes the least-squares fit more robust. In practice, feature detection methods can automate this, and do so with far fewer points if each one is pixel perfect. But I manually selected points and visualized them on both images to ensure correct order and alignment before computing H.</p>
 
 <p>Below are the visualized correspondences for both image sets and the recovered homography matrices:</p>
 
-<h4>First Set</h4>
-<pre>
-H (im1 → im2) = [[ 1.83437462e+00 5.57856823e-02 -1.38054126e+03]
+<h3>First Set</h3>
+<pre>H (im1 → im2) = [[ 1.83437462e+00 5.57856823e-02 -1.38054126e+03]
                   [ 2.62756831e-01 1.58344337e+00 -3.86642908e+02]
                   [ 4.10616761e-04 1.96645290e-05 1.00000000e+00]]
 H (im3 → im2) = [[ 4.43891537e-01 -4.08861421e-03 9.38074333e+02]
                   [-2.12246435e-01 8.32100326e-01 1.20356408e+02]
-                  [-2.84353729e-04 5.28596268e-07 1.00000000e+00]]
-</pre>
+                  [-2.84353729e-04 5.28596268e-07 1.00000000e+00]]</pre>
 
-<h4>Second Set</h4>
-<pre>
-H (im1 → im2) = [[ 1.65117333e+00 9.41184601e-05 -3.97672737e+02]
+<h3>Second Set</h3>
+<pre>H (im1 → im2) = [[ 1.65117333e+00 9.41184601e-05 -3.97672737e+02]
                   [ 2.49495478e-01 1.40777896e+00 -9.50721000e+01]
                   [ 9.69177470e-04 -6.28040078e-05 1.00000000e+00]]
 H (im3 → im2) = [[ 5.52680039e-01 4.72553054e-02 2.48030983e+02]
                   [-1.53263914e-01 8.87134504e-01 1.59745918e+01]
-                  [-6.98874592e-04 1.25769836e-04 1.00000000e+00]]
-</pre>
+                  [-6.98874592e-04 1.25769836e-04 1.00000000e+00]]</pre>
 
 <h2>Here are my correspondences</h2>
+
 <div class="image-wrapper">
 <div class="image-caption">Ryan's Room Image 1 Correspondences (Image 1 --> Image 2)</div>
 <img src="mediathree/im1(1-2)r.png" alt="Ryan's Room">
 </div>
+
 <div class="image-wrapper">
 <div class="image-caption">Ryan's Room Image 2 Correspondences (Image 1 --> Image 2)</div>
 <img src="mediathree/im2(1-2)r.png" alt="Ryan's Room">
 </div>
+
 <div class="image-wrapper">
 <div class="image-caption">Ryan's Room Image 2 Correspondences (Image 3 --> Image 2)</div>
 <img src="mediathree/im2(3-2)r.png" alt="Ryan's Room">
 </div>
+
 <div class="image-wrapper">
 <div class="image-caption">Ryan's Room Image 3 Correspondences (Image 3 --> Image 2)</div>
 <img src="mediathree/im3(3-2)r.png" alt="Ryan's Room">
@@ -231,14 +232,17 @@ H (im3 → im2) = [[ 5.52680039e-01 4.72553054e-02 2.48030983e+02]
 <div class="image-caption">Ethan's Room Image 1 Correspondences (Image 1 --> Image 2)</div>
 <img src="mediathree/im1(1-2)e.png" alt="Ethan's Room">
 </div>
+
 <div class="image-wrapper">
 <div class="image-caption">Ethan's Room Image 2 Correspondences (Image 1 --> Image 2)</div>
 <img src="mediathree/im2(1-2)e.png" alt="Ethan's Room">
 </div>
+
 <div class="image-wrapper">
 <div class="image-caption">Ethan's Room Image 2 Correspondences (Image 3 --> Image 2)</div>
 <img src="mediathree/im2(3-2)e.png" alt="Ethan's Room">
 </div>
+
 <div class="image-wrapper">
 <div class="image-caption">Ethan's Room Image 3 Correspondences (Image 3 --> Image 2)</div>
 <img src="mediathree/im3(3-2)e.png" alt="Ethan's Room">
@@ -248,14 +252,17 @@ H (im3 → im2) = [[ 5.52680039e-01 4.72553054e-02 2.48030983e+02]
 <div class="image-caption">Mishka's Room Image 1 Correspondences (Image 1 --> Image 2)</div>
 <img src="mediathree/im1(1-2)m.png" alt="mishkas room">
 </div>
+
 <div class="image-wrapper">
 <div class="image-caption">Mishka's Room Image 2 Correspondences (Image 1 --> Image 2)</div>
 <img src="mediathree/im2(1-2)m.png" alt="mishkas room">
 </div>
+
 <div class="image-wrapper">
 <div class="image-caption">Mishka's Room Image 2 Correspondences (Image 3 --> Image 2)</div>
 <img src="mediathree/im2(3-2)m.png" alt="mishkas room">
 </div>
+
 <div class="image-wrapper">
 <div class="image-caption">Mishka's Room Image 3 Correspondences (Image 3 --> Image 2)</div>
 <img src="mediathree/im3(3-2)m.png" alt="mishkas room">
@@ -266,8 +273,8 @@ H (im3 → im2) = [[ 5.52680039e-01 4.72553054e-02 2.48030983e+02]
 
 <p>To warp images using a given homography H, I implemented inverse warping to avoid holes in the resulting image. For each pixel in the output image (u, v), I used H^-1 to find its corresponding coordinates (x, y) in the source image. Otherwise, if we went over every (x, y) and warped it forward, we might have pixels that land on the same point or images that don't land anywhere on the output image, resulting in holes. When we inverse warp, the (x, y) coordinates may not land on a specific pixel, e.g., (x=10.7 and y=5.8). To figure out what pixel value it should have from the source image, we use interpolation. All 3 source images I rectified were warped using two interpolation methods: Bilinear and Nearest Neighbor. Here are the differences:</p>
 
-<p>Nearest Neighbor: the pixel value was copied from the closest pixel center -- (round(x - 0.5), round(y - 0.5)), with .5 used to indicate the center of a pixel.<br>
-Bilinear: the pixel value is computed from the 4 closest pixel centers (top left, top right, bottom left, bottom right) of the square surrounding (x, y). Each pixel value is multiplied by a weight that depends on how close that pixel center is to (x, y).</p>
+<p><strong>Nearest Neighbor:</strong> the pixel value was copied from the closest pixel center -- (round(x - 0.5), round(y - 0.5)), with .5 used to indicate the center of a pixel.</p>
+<p><strong>Bilinear:</strong> the pixel value is computed from the 4 closest pixel centers (top left, top right, bottom left, bottom right) of the square surrounding (x, y). Each pixel value is multiplied by a weight that depends on how close that pixel center is to (x, y).</p>
 
 <p>Bilinear interpolation produces smoother images by averaging the pixel value of the four nearest points but takes longer to run, while Nearest Neighbor interpolation produces more jagged edges by copying the nearest pixel value, but it runs faster. The quality of bilinear is higher and worth the extra time since bilinear interpolation is still fast and high-resolution images with smoothed pixels is helpful in making mosaics align properly.</p>
 
@@ -275,10 +282,12 @@ Bilinear: the pixel value is computed from the 4 closest pixel centers (top left
 <div class="image-caption">The Flagellation of Christ source image</div>
 <img src="mediathree/jesussource.png" alt="christ">
 </div>
+
 <div class="image-wrapper">
 <div class="image-caption">The Flagellation of Christ Bilinear Interpolation</div>
 <img src="mediathree/bj.png" alt="christ">
 </div>
+
 <div class="image-wrapper">
 <div class="image-caption">The Flagellation of Christ NN Interpolation</div>
 <img src="mediathree/nnj.png" alt="christ">
@@ -288,10 +297,12 @@ Bilinear: the pixel value is computed from the 4 closest pixel centers (top left
 <div class="image-caption">Last Supper source image</div>
 <img src="mediathree/lastsuppersource.jpg" alt="last supper">
 </div>
+
 <div class="image-wrapper">
 <div class="image-caption">Last Supper Bilinear Interpolation</div>
 <img src="mediathree/bls.png" alt="last supper">
 </div>
+
 <div class="image-wrapper">
 <div class="image-caption">Last Supper NN Interpolation</div>
 <img src="mediathree/nnls.png" alt="last supper">
@@ -301,10 +312,12 @@ Bilinear: the pixel value is computed from the 4 closest pixel centers (top left
 <div class="image-caption">Chemical Brothers Poster source image</div>
 <img src="mediathree/cbsource.png" alt="chemical brothers">
 </div>
+
 <div class="image-wrapper">
 <div class="image-caption">Chemical Brothers Poster Bilinear Interpolation</div>
-<img src="mediathree/cbb.png" alt="chemical brothers ">
+<img src="mediathree/cbb.png" alt="chemical brothers">
 </div>
+
 <div class="image-wrapper">
 <div class="image-caption">Chemical Brothers Poster NN Interpolation</div>
 <img src="mediathree/cbnn.png" alt="chemical brothers">
@@ -316,206 +329,175 @@ Bilinear: the pixel value is computed from the 4 closest pixel centers (top left
 <p> 
     I warped image one to image 2 + image 3 to image 2. Then I placed them on a canvas big enough to fit the max value of each image's offset + its width or height. I also allocated a mask for each canvas (with the parts containing the image set to 1). I kept track of where each image was by creating an alpha mask during the warp function (basically whenever you actually set a pixel in the output image thats within the min and max bounds of the warped corners, also set the coordinates in the alpha image to 1). Then I then distance transformed the masks, which gradually turns the value from 1 to 0 based on how far away each pixel is from the edge of the mask, which makes the blending softer and avoids harsh edges where the images overlap. I then ran these masks and the canvas through a laplacian stack which made sure both high and low frequencies were blended with this distance transformed mask.
 </p>
+
 <div class="image-wrapper"> 
     <div class="image-caption">Ryan's Room Mosaic</div>
     <img src="mediathree/mosaic r.png" alt="Cathedral">
-</div> 
-    <div class="image-wrapper"> 
-        <div class="image-caption">Ethan's Room Mosaic</div> <img src="mediathree/mosaic e.png" alt="Cathedral"> </div> <div class="image-wrapper"> <div class="image-caption">Mishka's Room Mosaic</div> <img src="mediathree/mosaic m.png" alt="Cathedral"> </div> </div> <br> 
+</div>
+
+<div class="image-wrapper"> 
+    <div class="image-caption">Ethan's Room Mosaic</div>
+    <img src="mediathree/mosaic e.png" alt="Cathedral">
+</div>
+
+<div class="image-wrapper"> 
+    <div class="image-caption">Mishka's Room Mosaic</div>
+    <img src="mediathree/mosaic m.png" alt="Cathedral">
+</div>
+
 <h1>Automatic Image Stitching and Panorama Creation</h1>
     
-    <!-- Part B.1: Harris Corner Detection -->
-    <div class="section">
-        <h2>B.1: Harris Corner Detection</h2>
-        
-        <div class="explanation">
-            <strong>Your Explanation:</strong> 
-            [Explain your implementation of Harris corner detection here. Describe how the Harris detector 
-            finds points where image intensity changes significantly in all directions, making them stable 
-            keypoints for matching. Mention the parameters you used and any observations about the 
-            corner detection quality.]
-        </div>
-        
-        <h3>Harris Corners (All Detected)</h3>
-        <div class="image-container">
-            <img src="harris_corners_all.png" alt="All Harris corners detected">
-            <p class="image-caption">Figure 1: All Harris corners detected on the image (before ANMS)</p>
-        </div>
-        
-        <h3>Adaptive Non-Maximal Suppression (ANMS)</h3>
-        <div class="explanation">
-            <strong>Your Explanation:</strong> 
-            [Explain ANMS here. Describe how it selects well-distributed corners by computing suppression 
-            radii - the distance each corner needs to travel to find a significantly stronger corner. 
-            Explain why this gives better spatial distribution than just taking the top N strongest corners.]
-        </div>
-        
-        <div class="side-by-side">
-            <div class="image-container">
-                <img src="harris_corners_all.png" alt="All Harris corners">
-                <p class="image-caption">Before ANMS: ~5000 corners (clustered)</p>
-            </div>
-            <div class="image-container">
-                <img src="harris_corners_anms.png" alt="ANMS selected corners">
-                <p class="image-caption">After ANMS: 400 well-distributed corners</p>
-            </div>
-        </div>
+<div class="section">
+    <h2>B1: Harris Corner Detection and Adaptive Non-Maximal Suppression</h2>
+    
+    <div class="explanation">
+        <strong>Harris Corners Explanation:</strong> 
+        The harris detector calculates the gradients of all the points of an image. A gradient in this case can be horizontal or vertical and measures
+        the rate of change going from one pixel to the next in a neighborhood of pixels. If there is a drastic shift when applying the horizontal gradient
+        then there is a a boundary being crossed across a vertical line. Same goes for the vertical gradient. An edge will have either a horizontal or vertical line
+        so one of its gradients will be large. A flat area will have no noticeable large gradients. Finally a corner will have a horizontal and vertical edge meeting
+        meaning both gradients are large. We can create a Harris matrix that stores these eigenvalues (x and y gradient respectivelly) and we can measure how large they each are by
+        dividing the determinant of the matrix by its trace. If its a corner then the determinant will be larger than the trace and be a large number, whereas
+        if its a flat region or an edge the ratio will be small producing a small number. We then just select all numbers over a certain threshold.
     </div>
     
-    <!-- Part B.2: Feature Descriptor Extraction -->
-    <div class="section">
-        <h2>B.2: Feature Descriptor Extraction</h2>
-        
-        <div class="explanation">
-            <strong>Your Explanation:</strong> 
-            [Explain feature descriptor extraction. Describe how you sample an 8×8 grid from a 40×40 window 
-            around each corner (every 5th pixel) to create a 64-dimensional descriptor. Explain the importance 
-            of bias/gain normalization (zero mean, unit variance) to make descriptors invariant to lighting 
-            changes. Mention why sampling at lower frequency makes descriptors more robust to small position errors.]
-        </div>
-        
-        <h3>Sample Feature Descriptors</h3>
-        <div class="image-container">
-            <img src="feature_descriptors.png" alt="Sample feature descriptors visualization">
-            <p class="image-caption">Figure 2: Visualization of 16 sample feature descriptors showing 
-            the normalized 8×8 intensity patterns around detected corners</p>
-        </div>
+    <h3>Adaptive Non-Maximal Suppression (ANMS)</h3>
+    <div class="explanation">
+        <strong>ANMS Explanation:</strong> 
+        Harris Corner selection selected all corners. The naive way too reduce how many corners there are (usually thousands in an image) without losing information
+        is to take the top_n maximum points. However this can concentrate towards really strong areas of the image and ignore corners that are locally stronger than
+        surrounding points while being weak corners OVERALL in the image. ANMS basically says: how far away are you from a corner thats stronger than you by x amount. Once
+        it find that neighboring corner it keeps track of the distance and then chooses the ones with the furthest distances. This way it both favors strong points
+        that are the strongest in a large area while also not favoring strong points that are surrounded by tons of storng points (although they will still be counted, just
+        less)
     </div>
     
-    <!-- Part B.3: Feature Matching -->
-    <div class="section">
-        <h2>B.3: Feature Matching</h2>
-        
-        <div class="explanation">
-            <strong>Your Explanation:</strong> 
-            [Explain feature matching using Lowe's ratio test. Describe how you compute the ratio of 
-            distances to the first and second nearest neighbors, and only accept matches where this ratio 
-            is below a threshold (typically 0.6-0.7). Explain that this rejects ambiguous matches where 
-            multiple features look similar. If you used mutual matching, explain how requiring bidirectional 
-            consistency further improves match quality.]
-        </div>
-        
-        <h3>Feature Matches Between Image Pairs</h3>
-        
-        <div class="image-container">
-            <img src="feature_matches_pair1.png" alt="Feature matches between images 1 and 2">
-            <p class="image-caption">Figure 3a: Feature matches between Image 1 and Image 2 
-            (showing ~50 of X total matches)</p>
-        </div>
-        
-        <div class="image-container">
-            <img src="feature_matches_pair2.png" alt="Feature matches between images 2 and 3">
-            <p class="image-caption">Figure 3b: Feature matches between Image 2 and Image 3 
-            (showing ~50 of Y total matches)</p>
-        </div>
+    <div class="image-container">
+        <img src="mediathree/corners r.png">
+        <p class="image-caption">Harris and ANMS for Ryan Room</p>
     </div>
     
-    <!-- Part B.4: RANSAC for Robust Homography -->
-    <div class="section">
-        <h2>B.4: RANSAC for Robust Homography Estimation</h2>
-        
-        <div class="explanation">
-            <strong>Your Explanation:</strong> 
-            [Explain RANSAC. Describe how it robustly estimates the homography despite outlier matches 
-            by iteratively: (1) sampling 4 random point pairs, (2) computing a candidate homography, 
-            (3) counting inliers (points with reprojection error below threshold), and (4) keeping the 
-            homography with most inliers. Explain why this works even with 50%+ outliers. Mention your 
-            parameters: number of iterations, inlier threshold (e.g., 5-6 pixels), and typical inlier 
-            ratio achieved.]
-        </div>
-        
-        <h3>RANSAC Inliers vs Outliers</h3>
-        <div class="image-container">
-            <img src="ransac_inliers.png" alt="RANSAC results showing inliers in green and outliers in red">
-            <p class="image-caption">Figure 4: RANSAC results - inliers (green) vs outliers (red). 
-            Achieved XX inliers out of YY total matches (ZZ% inlier ratio)</p>
-        </div>
-        
-        <h3>Comparison: Manual vs Automatic Stitching</h3>
-        <div class="explanation">
-            <strong>Your Explanation:</strong> 
-            [Compare manual vs automatic stitching results. Discuss the quality, alignment accuracy, 
-            and any differences you observe. Mention advantages of automatic stitching (speed, 
-            reproducibility) and any challenges faced.]
-        </div>
-        
-        <!-- Mosaic 1 -->
-        <h4>Mosaic 1</h4>
-        <div class="side-by-side">
-            <div class="image-container">
-                <img src="mosaic1_manual.png" alt="Mosaic 1 - Manual stitching">
-                <p class="image-caption">Manual stitching (hand-selected correspondences)</p>
-            </div>
-            <div class="image-container">
-                <img src="mosaic1_automatic.png" alt="Mosaic 1 - Automatic stitching">
-                <p class="image-caption">Automatic stitching (RANSAC-based)</p>
-            </div>
-        </div>
-        
-        <!-- Mosaic 2 -->
-        <h4>Mosaic 2</h4>
-        <div class="side-by-side">
-            <div class="image-container">
-                <img src="mosaic2_manual.png" alt="Mosaic 2 - Manual stitching">
-                <p class="image-caption">Manual stitching (hand-selected correspondences)</p>
-            </div>
-            <div class="image-container">
-                <img src="mosaic2_automatic.png" alt="Mosaic 2 - Automatic stitching">
-                <p class="image-caption">Automatic stitching (RANSAC-based)</p>
-            </div>
-        </div>
-        
-        <!-- Mosaic 3 -->
-        <h4>Mosaic 3</h4>
-        <div class="side-by-side">
-            <div class="image-container">
-                <img src="mosaic3_manual.png" alt="Mosaic 3 - Manual stitching">
-                <p class="image-caption">Manual stitching (hand-selected correspondences)</p>
-            </div>
-            <div class="image-container">
-                <img src="mosaic3_automatic.png" alt="Mosaic 3 - Automatic stitching">
-                <p class="image-caption">Automatic stitching (RANSAC-based)</p>
-            </div>
-        </div>
-        
-        <h3>Additional Automatic Panoramas</h3>
-        <div class="explanation">
-            <strong>Your Explanation:</strong> 
-            [Describe any additional panoramas you created. Discuss what scenes worked well and any 
-            challenges with particular image sets (e.g., low texture, repetitive patterns, large 
-            viewpoint changes).]
-        </div>
-        
-        <div class="mosaic-grid">
-            <div class="image-container">
-                <img src="panorama_extra1.png" alt="Additional panorama 1">
-                <p class="image-caption">Additional Panorama 1</p>
-            </div>
-            <div class="image-container">
-                <img src="panorama_extra2.png" alt="Additional panorama 2">
-                <p class="image-caption">Additional Panorama 2</p>
-            </div>
-        </div>
+    <div class="image-container">
+        <img src="mediathree/corners e.png">
+        <p class="image-caption">Harris and ANMS for Ethan Room</p>
     </div>
     
-    <!-- Conclusion -->
-    <div class="section">
-        <h2>Conclusions and Learnings</h2>
-        <div class="explanation">
-            <strong>Your Reflection:</strong> 
-            [Summarize what you learned from this project. Discuss the coolest part, biggest challenges, 
-            and insights about how automatic feature detection and matching works. Reflect on the 
-            strengths and limitations of the multi-resolution spline blending approach for creating 
-            seamless panoramas.]
-        </div>
+    <div class="image-container">
+        <img src="mediathree/corners m.png">
+        <p class="image-caption">Harris and ANMS for Mishka Room</p>
     </div>
+</div>
+
+<div class="section">
+    <h2>B2: Feature Descriptor Extraction</h2>
+    
+    <div class="explanation">
+        <strong>Feature Descriptor Explination:</strong> 
+        A feature descriptor is a way of storing what a point on an image looks like so that the computer can match other points in other images
+        that share that feature and compare a list of features from both images until it matches them all up (excluding those that only appear in one
+        image or the other, and not both) we sample an 8x8 grid around each corner for every 5th pixel) which displays that pixel in grayscale and normalizes
+        it to avoid injecting any differences like contrast or brightness into the descriptor that dont actually describe the underlying object. We want the computer
+        to avoid changing the images for different exposures so its invariant to lighting changes. Finally, we
+        "unroll" the 8x8 into a 64 dimension descriptor that we can compare with other descriptors. 
+    </div>
+    
+    <h3>Sample Feature Descriptors</h3>
+    <div class="image-container">
+        <img src="mediathree/features e.png">
+        <p class="image-caption">16 features extracted from Ethan's room</p>
+    </div>
+</div>
+
+<div class="section">
+    <h2>B3: Feature Matching</h2>
+    
+    <div class="explanation">
+        <strong>How Feature Matching works:</strong> 
+        We match features using Lowe's ration test. We find the ratio between the first nearest neighbor (in euclidean distance
+        the feature that has the lowest distance or has the most similar descriptor) and the second nearest neighbor.
+        The idea is that we only want to pick the first descriptor/ nearest neighbor as our match if its really far from other
+        matches. Otherwise it cant be that good of a match if everything else also looks the same. Additionally I checked
+        that both features choose each other in my feature matching algorithm for extra assurance.
+    </div>
+    
+    <h3>Feature Matches Between Images</h3>
+    
+    <div class="image-container">
+        <img src="mediathree/ransac r.png">
+        <p class="image-caption">lines showing which features in im1 point to features in im2 (Ryan's Room)</p>
+    </div>
+    
+    <div class="image-container">
+        <img src="mediathree/ransac e.png">
+        <p class="image-caption">Same for Ethan's room</p>
+    </div>
+
+    <div class="image-container">
+        <img src="mediathree/ransac m.png">
+        <p class="image-caption">Same for Mishka's room</p>
+    </div>
+</div>
+
+<div class="section">
+    <h2>B4: RANSAC</h2>
+    
+    <div class="explanation">
+        <strong>Ransac Explained:</strong> 
+        Ransac has 4 steps: (1) choose 4 random point pairs between my chosen matches. (2) compute a homography between those points
+        to the points in the other image (3) count inliers which is the number of points that are below a certain threshold when we take the difference between Hp and p' (i.e. between
+        Homography applied to first set of points and what the second set of points actually is). (4) We then keep the homography which has the most inliers
+        and therefore the least outliers. Basically of all the features choose the batch that best represents the ideal homography for the image.
+    </div>
+    
+    <div class="image-container">
+        <img src="mediathree/ransac r.png">
+        <p class="image-caption">same as above images since they showed both feature matching and ransac selection</p>
+    </div>
+    
+    <div class="image-container">
+        <img src="mediathree/ransac e.png">
+        <p class="image-caption">same as above images since they showed both feature matching and ransac selection</p>
+    </div>
+
+    <div class="image-container">
+        <img src="mediathree/ransac m.png">
+        <p class="image-caption">same as above images since they showed both feature matching and ransac selection</p>
+    </div>
+</div>
+    
+<h3>Comparison to the Manual stitching above: Automatic stitching</h3>
+<div class="explanation">
+    <strong>Issues with alignment:</strong> 
+    Automatic while not faster is more impressive in that it chooses better points and doesnt require manual input. The images
+    also look better, both because I improved my masking in the mosaic but also because they really reduce any shakiness when i manually 
+    chose points, since they filter out errors in a certain pixel range. One Issue I noticed is that while 3 image stiching for manual
+    points didnt take too long to run. Automatic stching did because of the types of images I took. Scaling down by .8 usually fixed the issues
+    but for images with lots of posters (like in my room -- ryan's) the amount of edges detected by harris was so large it nearly crashed my computer unless
+    I scaled it down by .7 and made sure not every single image was full of posters.
+</div>
+
+<h3>Mosaic 1</h3>
+<div class="image-container">
+    <img src="mediathree/mosaic r2 manual.png">
+    <p class="image-caption">Manual stitching</p>
+</div>
+
+<div class="image-container">
+    <img src="mediathree/mosaic r2 auto.png">
+    <p class="image-caption">Automatic stitching Ryan's Room</p>
+</div>
+
+<h3>Mosaic 2</h3>
+<div class="image-container">
+    <img src="mediathree/mosaic e auto.png">
+    <p class="image-caption">Automatic stitching Ethan's Room</p>
+</div>
+
+<h3>Mosaic 3</h3>
+<div class="image-container">
+    <img src="mediathree/mosaic m auto.png">
+    <p class="image-caption">Automatic stitching Mishka's Room</p>
+</div>
+
 </body>
 </html>
-
-
-
-
-
-
-
-
